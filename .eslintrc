@@ -1,0 +1,21 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "comma-dangle": "off",
+    "jsx-a11y/anchor-is-valid": [ "error", {
+      "components": [ "Link" ],
+      "specialLink": [ "to", "hrefLeft", "hrefRight" ],
+      "aspects": [ "noHref", "invalidHref", "preferButton" ]
+    }],
+    "react/forbid-prop-types": "off"
+  },
+  "globals": {
+    "document": true,
+    "fetch": true,
+    "Headers": true,
+    "setTimeout": true,
+    "localStorage": true,
+    "URLSearchParams": true
+  }
+}
