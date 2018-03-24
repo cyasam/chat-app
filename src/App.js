@@ -11,11 +11,11 @@ import { AUTH_SUCCESS } from './actions/auth-action';
 // Components
 import Header from './components/Header';
 import Protected from './components/Protected';
+import ActivateAccount from './components/ActivateAccount';
 import Home from './pages/Home';
 import RegisterIndex from './pages/register';
 import Login from './pages/Login';
-import User from './pages/User';
-import UserList from './pages/UserList';
+import Profile from './pages/Profile';
 
 const store = createStore(
   rootReducer,
@@ -38,12 +38,12 @@ const App = () => (
       <div className="wrapper">
         <Header />
         <div className="container">
+          <ActivateAccount />
           <Switch>
             <Route path="/" exact component={Home} />
             <Route path="/register" component={RegisterIndex} />
             <Route path="/login" component={Login} />
-            <Route path="/users" component={Protected(UserList)} />
-            <Route path="/user/:id" component={Protected(User)} />
+            <Route path="/profile" component={Protected(Profile)} />
             <Route component={Home} />
           </Switch>
         </div>

@@ -16,7 +16,12 @@ export default fetchData => (dispatch) => {
     headers: new Headers({
       'Content-Type': 'application/json'
     })
-  }).then(response => response.json()).then((result) => {
+  }).then((response) => {
+    if (!response.ok) {
+      throw new Error();
+    }
+    return response.json();
+  }).then((result) => {
     if (result.status) {
       dispatch({
         type: REGISTER_SUCCESS,
@@ -36,15 +41,14 @@ export default fetchData => (dispatch) => {
         }
       });
     }
-  }).catch((error) => {
+  }).catch(() => {
     dispatch({
       type: REGISTER_ERROR,
       payload: {
         isFetching: false,
         status: false,
-        message: 'Internal error'
+        message: 'Internal Error'
       }
     });
-    throw error;
   });
 };

@@ -103,13 +103,13 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.authentication.auth,
+  auth: state.authentication.auth.status,
   serverMessage: state.authentication.message,
   isFetching: state.authentication.isFetching,
 });
 
 Login.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  auth: PropTypes.object.isRequired,
   serverMessage: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
   authLoader: PropTypes.func.isRequired,

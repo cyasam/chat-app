@@ -1,25 +1,36 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import authLoader from '../actions/auth-action';
 
 export default (ComposedComponent) => {
-  const Protected = ({ auth }) => {
-    if (!auth) {
-      this.props.history.push('/login');
+  class Protected extends Component {
+    componentWillMount() {
+      const { auth, history } = this.props;
+      if (!auth) {
+        history.push('/login');
+      }
     }
-    return <ComposedComponent {...this.props} />;
-  };
+
+    componentWillReceiveProps({ auth, history }) {
+      if (!auth) {
+        history.push('/login');
+      }
+    }
+
+    render() {
+      return <ComposedComponent {...this.props} />;
+    }
+  }
 
   const mapStateToProps = state => ({
-    auth: state.authentication.auth
+    auth: state.authentication.auth.status
   });
 
   Protected.propTypes = {
-    auth: PropTypes.bool.isRequired,
+    auth: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   };
 
-  return withRouter(connect(mapStateToProps, { authLoader })(Protected));
+  return withRouter(connect(mapStateToProps)(Protected));
 };

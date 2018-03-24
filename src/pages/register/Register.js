@@ -145,14 +145,14 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.authentication.auth,
+  auth: state.authentication.auth.status,
   status: state.registerForm.status,
   serverMessage: state.registerForm.message,
   isFetching: state.registerForm.isFetching,
 });
 
 Register.propTypes = {
-  auth: PropTypes.bool.isRequired,
+  auth: PropTypes.object.isRequired,
   status: PropTypes.bool.isRequired,
   serverMessage: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,

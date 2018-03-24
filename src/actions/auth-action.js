@@ -23,14 +23,22 @@ export default (email, password) => (dispatch) => {
     headers: new Headers({
       'Content-Type': 'application/json'
     })
-  }).then(response => response.json()).then((result) => {
+  }).then((response) => {
+    if (!response.ok) {
+      throw Error(response.status);
+    }
+    return response.json();
+  }).then((result) => {
     if (result.status) {
       localStorage.setItem(config.TOKEN_KEY_NAME, result.token);
       dispatch({
         type: AUTH_SUCCESS,
         payload: {
           isFetching: false,
-          auth: true,
+          auth: {
+            status: true,
+            activated: result.activated
+          },
           message: result.message
         }
       });
@@ -39,20 +47,31 @@ export default (email, password) => (dispatch) => {
         type: AUTH_ERROR,
         payload: {
           isFetching: false,
-          auth: false,
+          auth: {
+            status: false
+          },
+          activated: false,
           message: result.message
         }
       });
     }
   }).catch((error) => {
+    let errorMessage;
+    if (error.message === '401') {
+      errorMessage = 'Wrong email and/or password';
+    } else {
+      errorMessage = error.message;
+    }
+
     dispatch({
       type: AUTH_ERROR,
       payload: {
         isFetching: false,
-        auth: false,
-        message: 'Internal error'
+        auth: {
+          status: false
+        },
+        message: errorMessage
       }
     });
-    throw error;
   });
 };

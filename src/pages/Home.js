@@ -1,20 +1,7 @@
-import React, { Fragment } from 'react';
-import config from '../config';
+import React from 'react';
 
-const Home = () => {
-  const activated = localStorage.getItem('activatedAccount') === 'true';
-  const token = localStorage.getItem(config.TOKEN_KEY_NAME);
-  let auth = false;
-  if (token) {
-    auth = true;
-  }
-
-  return (
-    <Fragment>
-      { (!activated && auth) ? <div className="success">Please activate your account.</div> : null }
-      <div>Welcome to my humble in</div>
-    </Fragment>
-  );
-};
+const Home = () => (
+  <div>Welcome to my humble in</div>
+);
 
 export default Home;
