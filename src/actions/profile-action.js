@@ -46,11 +46,14 @@ export default () => (dispatch) => {
     }
   }).catch((error) => {
     if (error.status === 401) {
+      localStorage.removeItem(config.TOKEN_KEY_NAME);
       dispatch({
         type: AUTH_ERROR,
         payload: {
           isFetching: false,
-          auth: false,
+          auth: {
+            status: false
+          },
           message: 'Please login again.'
         }
       });
