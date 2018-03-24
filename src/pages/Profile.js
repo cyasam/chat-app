@@ -20,8 +20,9 @@ class User extends Component {
       <div style={{ position: 'relative', minHeight: 50 }}>
         { message && <div className="error">{message}</div> }
         { isFetching && <Loading /> }
-        <p>{ data.name }</p>
-        <p>{ data.email }</p>
+        <p>Name: { data.name }</p>
+        <p>Email: { data.email }</p>
+        <p>Account activated?: { data.activated ? '✔' : 'X' }</p>
       </div>
     );
   }
