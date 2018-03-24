@@ -21,7 +21,7 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    if (this.props.auth) {
+    if (this.props.authStatus) {
       this.props.history.push('/');
     }
   }
@@ -29,7 +29,7 @@ class Login extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({ message: nextProps.serverMessage });
 
-    if (nextProps.auth) {
+    if (nextProps.authStatus) {
       this.props.history.push('/');
     }
   }
@@ -74,7 +74,7 @@ class Login extends Component {
   }
 
   render() {
-    const { isFetching, auth } = this.props;
+    const { isFetching, authStatus } = this.props;
 
     const {
       message,
@@ -84,7 +84,7 @@ class Login extends Component {
 
     return (
       <div className="form-wrapper">
-        { message && <div className={auth ? 'success' : 'error'}>{message}</div> }
+        { message && <div className={authStatus ? 'success' : 'error'}>{message}</div> }
         <form onSubmit={this.onSubmit}>
           { isFetching && <Loading /> }
           <label htmlFor="email">
@@ -103,13 +103,13 @@ class Login extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.authentication.auth.status,
+  authStatus: state.authentication.auth.status,
   serverMessage: state.authentication.message,
   isFetching: state.authentication.isFetching,
 });
 
 Login.propTypes = {
-  auth: PropTypes.object.isRequired,
+  authStatus: PropTypes.bool.isRequired,
   serverMessage: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
   authLoader: PropTypes.func.isRequired,

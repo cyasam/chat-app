@@ -8,7 +8,7 @@ const Header = props => (
   <header className="main-header">
     <nav>
       <Link to="/">Home</Link>
-      { props.auth ? (
+      { props.authStatus ? (
         <Fragment>
           <Link to="/profile">Profile</Link>
           <button
@@ -28,11 +28,11 @@ const Header = props => (
 );
 
 const mapStateToProps = state => ({
-  auth: state.authentication.auth.status
+  authStatus: state.authentication.auth.status
 });
 
 Header.propTypes = {
-  auth: PropTypes.object.isRequired,
+  authStatus: PropTypes.bool.isRequired,
   logout: PropTypes.func.isRequired
 };
 

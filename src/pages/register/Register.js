@@ -23,7 +23,7 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    if (this.props.auth) {
+    if (this.props.authStatus) {
       this.props.history.push('/');
     }
   }
@@ -145,14 +145,14 @@ class Register extends Component {
 }
 
 const mapStateToProps = state => ({
-  auth: state.authentication.auth.status,
+  authStatus: state.authentication.auth.status,
   status: state.registerForm.status,
   serverMessage: state.registerForm.message,
   isFetching: state.registerForm.isFetching,
 });
 
 Register.propTypes = {
-  auth: PropTypes.object.isRequired,
+  authStatus: PropTypes.bool.isRequired,
   status: PropTypes.bool.isRequired,
   serverMessage: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,

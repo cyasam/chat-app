@@ -27,7 +27,9 @@ if (token) {
   store.dispatch({
     type: AUTH_SUCCESS,
     payload: {
-      auth: true
+      auth: {
+        status: true
+      }
     }
   });
 }

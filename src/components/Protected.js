@@ -6,14 +6,14 @@ import { connect } from 'react-redux';
 export default (ComposedComponent) => {
   class Protected extends Component {
     componentWillMount() {
-      const { auth, history } = this.props;
-      if (!auth) {
+      const { authStatus, history } = this.props;
+      if (!authStatus) {
         history.push('/login');
       }
     }
 
-    componentWillReceiveProps({ auth, history }) {
-      if (!auth) {
+    componentWillReceiveProps({ authStatus, history }) {
+      if (!authStatus) {
         history.push('/login');
       }
     }
@@ -24,11 +24,11 @@ export default (ComposedComponent) => {
   }
 
   const mapStateToProps = state => ({
-    auth: state.authentication.auth.status
+    authStatus: state.authentication.auth.status
   });
 
   Protected.propTypes = {
-    auth: PropTypes.object.isRequired,
+    authStatus: PropTypes.bool.isRequired,
     history: PropTypes.object.isRequired
   };
 
