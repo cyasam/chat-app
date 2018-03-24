@@ -19,7 +19,9 @@ export default () => (dispatch) => {
       type: LOGOUT_SUCCESS,
       payload: {
         isFetching: false,
-        auth: false,
+        auth: {
+          status: false
+        },
         message: ''
       }
     });
@@ -28,7 +30,6 @@ export default () => (dispatch) => {
       type: LOGOUT_ERROR,
       payload: {
         isFetching: false,
-        auth: true,
         message: ''
       }
     });

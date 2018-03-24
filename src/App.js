@@ -6,7 +6,6 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import rootReducer from './reducers';
 import config from './config';
-import { AUTH_SUCCESS } from './actions/auth-action';
 
 // Components
 import Header from './components/Header';
@@ -16,6 +15,7 @@ import Home from './pages/Home';
 import RegisterIndex from './pages/register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import authChecker from './actions/auth-check-action';
 
 const store = createStore(
   rootReducer,
@@ -24,14 +24,7 @@ const store = createStore(
 
 const token = localStorage.getItem(config.TOKEN_KEY_NAME);
 if (token) {
-  store.dispatch({
-    type: AUTH_SUCCESS,
-    payload: {
-      auth: {
-        status: true
-      }
-    }
-  });
+  store.dispatch(authChecker());
 }
 
 const App = () => (
