@@ -3,9 +3,7 @@ import { LOGOUT_LOADING, LOGOUT_SUCCESS, LOGOUT_ERROR } from '../actions/logout-
 
 const INITIAL_STATE = {
   isFetching: false,
-  auth: {
-    status: false
-  },
+  auth: {},
   message: ''
 };
 

@@ -55,9 +55,7 @@ export default formData => (dispatch) => {
         type: AUTH_ERROR,
         payload: {
           isFetching: false,
-          auth: {
-            status: false
-          },
+          auth: {},
           message: ''
         }
       });

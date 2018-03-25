@@ -47,9 +47,7 @@ export default (email, password) => (dispatch) => {
         type: AUTH_ERROR,
         payload: {
           isFetching: false,
-          auth: {
-            status: false
-          },
+          auth: {},
           activated: false,
           message: result.message
         }
@@ -67,9 +65,7 @@ export default (email, password) => (dispatch) => {
       type: AUTH_ERROR,
       payload: {
         isFetching: false,
-        auth: {
-          status: false
-        },
+        auth: {},
         message: errorMessage
       }
     });

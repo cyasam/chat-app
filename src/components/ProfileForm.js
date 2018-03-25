@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validator from 'validator';
+import { MdWarning, MdDone } from 'react-icons/lib/md';
 import profileFormLoader from '../actions/profile-form-action';
 import Loading from '../components/Loading';
 
@@ -106,6 +107,27 @@ class ProfileForm extends Component {
     }
   }
 
+  emailActiveStatus() {
+    const { data } = this.props;
+
+    return (
+      <span>
+        { data.activated ?
+          (
+            <Fragment>
+              <MdDone />Activated
+            </Fragment>
+          ) :
+          (
+            <Fragment>
+              <MdWarning />Not activated
+            </Fragment>
+          )
+        }
+      </span>
+    );
+  }
+
   renderMessage() {
     const {
       message,
@@ -139,7 +161,7 @@ class ProfileForm extends Component {
           { isFetching && <Loading /> }
           <label htmlFor="email">
             <span>Email</span>
-            <p>{ data.email }</p>
+            <div className="value">{ data.email } { this.emailActiveStatus() }</div>
           </label>
           <label htmlFor="name">
             <span>Name</span>

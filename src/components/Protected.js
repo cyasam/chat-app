@@ -8,15 +8,15 @@ export default (ComposedComponent) => {
   class Protected extends Component {
     componentWillMount() {
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
-      const { authStatus, history } = this.props;
-      if (!authStatus && !token) {
+      const { auth, history } = this.props;
+      if (!auth.status && !token) {
         history.push('/login');
       }
     }
 
-    componentWillReceiveProps({ authStatus, history }) {
+    componentWillReceiveProps({ auth, history }) {
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
-      if (!authStatus && !token) {
+      if (!auth.status && !token) {
         history.push('/login');
       }
     }
@@ -27,11 +27,11 @@ export default (ComposedComponent) => {
   }
 
   const mapStateToProps = state => ({
-    authStatus: state.authentication.auth.status
+    auth: state.authentication.auth
   });
 
   Protected.propTypes = {
-    authStatus: PropTypes.bool.isRequired,
+    auth: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired
   };
 
