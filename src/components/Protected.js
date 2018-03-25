@@ -2,18 +2,21 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import config from '../config';
 
 export default (ComposedComponent) => {
   class Protected extends Component {
     componentWillMount() {
+      const token = localStorage.getItem(config.TOKEN_KEY_NAME);
       const { authStatus, history } = this.props;
-      if (!authStatus) {
+      if (!authStatus && !token) {
         history.push('/login');
       }
     }
 
     componentWillReceiveProps({ authStatus, history }) {
-      if (!authStatus) {
+      const token = localStorage.getItem(config.TOKEN_KEY_NAME);
+      if (!authStatus && !token) {
         history.push('/login');
       }
     }

@@ -123,19 +123,19 @@ class Register extends Component {
           { isFetching && <Loading /> }
           <label htmlFor="name">
             <span>Name</span>
-            <input id="name" name="name" type="text" defaultValue={name} onChange={this.onChange} />
+            <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
           </label>
           <label htmlFor="email">
             <span>Email</span>
-            <input id="email" name="email" type="email" defaultValue={email} onChange={this.onChange} />
+            <input id="email" name="email" type="email" value={email} onChange={this.onChange} />
           </label>
           <label htmlFor="password">
             <span>Password</span>
-            <input id="password" name="password" type="password" defaultValue={password} onChange={this.onChange} />
+            <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
           </label>
           <label htmlFor="confirm-password">
             <span>Confirm password</span>
-            <input id="confirm-password" name="confirmPassword" type="password" defaultValue={confirmPassword} onChange={this.onChange} />
+            <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
           </label>
           <button type="submit" disabled={isFetching}>SignUp</button>
         </form>

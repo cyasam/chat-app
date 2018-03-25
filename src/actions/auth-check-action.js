@@ -41,7 +41,7 @@ export default () => (dispatch) => {
           auth: {
             status: false
           },
-          message: 'Please login again.'
+          message: ''
         }
       });
     }
@@ -54,7 +54,7 @@ export default () => (dispatch) => {
         auth: {
           status: false
         },
-        message: 'Please login again.'
+        message: ''
       }
     });
   });

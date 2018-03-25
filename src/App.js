@@ -2,10 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import thunk from 'redux-thunk';
-import logger from 'redux-logger';
 import rootReducer from './reducers';
 import config from './config';
+import customMiddlewares from './middlewares';
 
 // Components
 import Header from './components/Header';
@@ -19,7 +18,7 @@ import authChecker from './actions/auth-check-action';
 
 const store = createStore(
   rootReducer,
-  applyMiddleware(thunk, logger)
+  applyMiddleware(...customMiddlewares)
 );
 
 const token = localStorage.getItem(config.TOKEN_KEY_NAME);

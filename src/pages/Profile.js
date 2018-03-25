@@ -3,9 +3,10 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import profileLoader from '../actions/profile-action';
+import ProfileForm from '../components/ProfileForm';
 import Loading from '../components/Loading';
 
-class User extends Component {
+class Profile extends Component {
   componentWillMount() {
     this.props.profileLoader();
   }
@@ -20,9 +21,7 @@ class User extends Component {
       <div style={{ position: 'relative', minHeight: 50 }}>
         { message && <div className="error">{message}</div> }
         { isFetching && <Loading /> }
-        <p>Name: { data.name }</p>
-        <p>Email: { data.email }</p>
-        <p>Account activated?: { data.activated ? '✔' : 'X' }</p>
+        <ProfileForm data={data} />
       </div>
     );
   }
@@ -34,11 +33,11 @@ const mapStateToProps = state => ({
   message: state.profile.message
 });
 
-User.propTypes = {
+Profile.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
   message: PropTypes.string.isRequired,
   profileLoader: PropTypes.func.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { profileLoader })(User));
+export default withRouter(connect(mapStateToProps, { profileLoader })(Profile));

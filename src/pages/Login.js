@@ -89,11 +89,11 @@ class Login extends Component {
           { isFetching && <Loading /> }
           <label htmlFor="email">
             <span>Email</span>
-            <input id="email" name="email" type="email" defaultValue={email} onChange={this.onChange} />
+            <input id="email" name="email" type="email" value={email} onChange={this.onChange} />
           </label>
           <label htmlFor="password">
             <span>Password</span>
-            <input id="password" name="password" type="password" defaultValue={password} onChange={this.onChange} />
+            <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
           </label>
           <button type="submit" disabled={isFetching}>Login</button>
         </form>
