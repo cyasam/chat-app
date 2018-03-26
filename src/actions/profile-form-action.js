@@ -25,7 +25,7 @@ export default formData => (dispatch) => {
         payload: {
           isFetching: false,
           status: true,
-          data: result.data.response,
+          data: result.data,
           message: result.data.message
         }
       });
