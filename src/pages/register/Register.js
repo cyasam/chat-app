@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validator from 'validator';
-import registerLoader from '../../actions/register-action';
+import registerFormLoader from '../../actions/register-form-action';
 import Loading from '../../components/Loading';
 
 class Register extends Component {
@@ -34,7 +34,7 @@ class Register extends Component {
     if (nextProps.status) {
       this.props.history.push({
         pathname: `${this.props.match.url}/complete`,
-        state: { status: nextProps.status, message: nextProps.serverMessage }
+        state: { activated: nextProps.status, message: nextProps.serverMessage }
       });
     }
   }
@@ -99,7 +99,7 @@ class Register extends Component {
       password
     };
 
-    this.props.registerLoader(fetchData);
+    this.props.registerFormLoader(fetchData);
   }
 
   render() {
@@ -156,9 +156,9 @@ Register.propTypes = {
   status: PropTypes.bool.isRequired,
   serverMessage: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  registerLoader: PropTypes.func.isRequired,
+  registerFormLoader: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { registerLoader })(Register));
+export default withRouter(connect(mapStateToProps, { registerFormLoader })(Register));

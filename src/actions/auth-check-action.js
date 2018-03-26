@@ -1,4 +1,5 @@
 import config from '../config';
+import requests from '../helpers/requests';
 import { AUTH_LOADING, AUTH_SUCCESS, AUTH_ERROR } from './auth-action';
 
 export default () => (dispatch) => {
@@ -13,7 +14,7 @@ export default () => (dispatch) => {
 
   if (!token) {
     dispatch({
-      type: AUTH_SUCCESS,
+      type: AUTH_ERROR,
       payload: {
         isFetching: false,
         auth: {
@@ -23,23 +24,14 @@ export default () => (dispatch) => {
       }
     });
   } else {
-    fetch('http://192.168.1.13:4567/api/profile', {
-      headers: new Headers({
-        Authorization: `Bearer ${token}`
-      })
-    }).then((response) => {
-      if (!response.ok) {
-        return Promise.reject(response);
-      }
-      return response.json();
-    }).then((result) => {
-      if (result.status && result.data) {
+    requests.api.get('/profile').then((result) => {
+      if (result.data.status) {
         dispatch({
           type: AUTH_SUCCESS,
           payload: {
             isFetching: false,
             auth: {
-              status: true,
+              status: result.data.status,
               activated: result.data.activated
             },
             message: ''
@@ -50,7 +42,9 @@ export default () => (dispatch) => {
           type: AUTH_ERROR,
           payload: {
             isFetching: false,
-            auth: {},
+            auth: {
+              status: false
+            },
             message: ''
           }
         });
@@ -61,7 +55,9 @@ export default () => (dispatch) => {
         type: AUTH_ERROR,
         payload: {
           isFetching: false,
-          auth: {},
+          auth: {
+            status: false
+          },
           message: ''
         }
       });

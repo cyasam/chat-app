@@ -1,4 +1,5 @@
 import config from '../config';
+import requests from '../helpers/requests';
 
 export const AUTH_LOADING = 'AUTH_LOADING';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
@@ -17,29 +18,23 @@ export default (email, password) => (dispatch) => {
     password
   };
 
-  fetch('http://192.168.1.13:4567/auth/login', {
+  requests.auth({
     method: 'post',
-    body: JSON.stringify(fetchData),
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    })
-  }).then((response) => {
-    if (!response.ok) {
-      throw Error(response.status);
-    }
-    return response.json();
+    url: '/login',
+    data: fetchData
   }).then((result) => {
-    if (result.status) {
-      localStorage.setItem(config.TOKEN_KEY_NAME, result.token);
+    if (result.data.status) {
+      localStorage.setItem(config.TOKEN_KEY_NAME, result.data.token);
+      requests.apiReInit();
       dispatch({
         type: AUTH_SUCCESS,
         payload: {
           isFetching: false,
           auth: {
             status: true,
-            activated: result.activated
+            activated: result.data.activated
           },
-          message: result.message
+          message: result.data.message
         }
       });
     } else {
@@ -47,25 +42,29 @@ export default (email, password) => (dispatch) => {
         type: AUTH_ERROR,
         payload: {
           isFetching: false,
-          auth: {},
+          auth: {
+            status: false
+          },
           activated: false,
-          message: result.message
+          message: result.data.message
         }
       });
     }
   }).catch((error) => {
     let errorMessage;
-    if (error.message === '401') {
+    if (error.response.status === 401) {
       errorMessage = 'Wrong email and/or password';
     } else {
-      errorMessage = error.message;
+      errorMessage = error.response.data.message;
     }
 
     dispatch({
       type: AUTH_ERROR,
       payload: {
         isFetching: false,
-        auth: {},
+        auth: {
+          status: false
+        },
         message: errorMessage
       }
     });

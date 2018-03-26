@@ -1,4 +1,5 @@
 import config from '../config';
+import requests from '../helpers/requests';
 import { AUTH_ERROR } from './auth-action';
 
 export const PROFILE_FORM_LOADING = 'PROFILE_FORM_LOADING';
@@ -13,29 +14,19 @@ export default formData => (dispatch) => {
     }
   });
 
-  const token = localStorage.getItem(config.TOKEN_KEY_NAME);
-
-  fetch('http://192.168.1.13:4567/api/profile/save', {
+  requests.api({
     method: 'post',
-    body: JSON.stringify(formData),
-    headers: new Headers({
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`
-    })
-  }).then((response) => {
-    if (!response.ok) {
-      return Promise.reject(response);
-    }
-    return response.json();
+    url: '/profile/save',
+    data: formData
   }).then((result) => {
-    if (result.status) {
+    if (result.data.status) {
       dispatch({
         type: PROFILE_FORM_SUCCESS,
         payload: {
           isFetching: false,
           status: true,
-          data: result.data,
-          message: result.message
+          data: result.data.response,
+          message: result.data.message
         }
       });
     } else {
@@ -44,7 +35,7 @@ export default formData => (dispatch) => {
         payload: {
           isFetching: false,
           status: false,
-          message: result.message
+          message: result.data.message
         }
       });
     }
@@ -55,7 +46,9 @@ export default formData => (dispatch) => {
         type: AUTH_ERROR,
         payload: {
           isFetching: false,
-          auth: {},
+          auth: {
+            status: false
+          },
           message: ''
         }
       });
@@ -66,7 +59,7 @@ export default formData => (dispatch) => {
       payload: {
         isFetching: false,
         status: false,
-        message: 'Internal Error'
+        message: error.response.data.message
       }
     });
   });

@@ -17,6 +17,10 @@ body {
 
   &.app {
     z-index: 20;
+
+    p {
+      font-size: 30px;
+    }
   }
 
   &:before {
@@ -33,7 +37,7 @@ body {
   p {
     position: relative;
     z-index: 1;
-    font-size: 30px;
+    font-size: 20px;
   }
 }
 
