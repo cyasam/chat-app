@@ -1,4 +1,5 @@
-@import 'normalize-scss/sass/_normalize';
+@import 'node_modules/normalize-scss/sass/_normalize';
+@include normalize();
 
 body {
   font: 14px/1.2 Arial, sans-serif;
@@ -40,7 +41,6 @@ body {
     font-size: 20px;
   }
 }
-
 
 .form-wrapper {
   position: relative;
@@ -106,5 +106,31 @@ body {
         color: #a94442;
       }
     }
+  }
+}
+
+#app {
+  padding: 20px;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.login-page {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.profile-form {
+  display: flex;
+
+  .profile-image-container {
+    width: 300px;
+  }
+
+  .form-inner {
+    width: 100%;
   }
 }

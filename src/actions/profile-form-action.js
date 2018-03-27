@@ -40,7 +40,7 @@ export default formData => (dispatch) => {
       });
     }
   }).catch((error) => {
-    if (error.status === 401) {
+    if (error.response.status === 401) {
       localStorage.removeItem(config.TOKEN_KEY_NAME);
       dispatch({
         type: AUTH_ERROR,
@@ -49,7 +49,16 @@ export default formData => (dispatch) => {
           auth: {
             status: false
           },
-          message: ''
+          message: 'No Authorization.'
+        }
+      });
+    } else if (error.response) {
+      dispatch({
+        type: PROFILE_FORM_ERROR,
+        payload: {
+          isFetching: false,
+          status: false,
+          message: error.response.data.message
         }
       });
     }
@@ -59,7 +68,7 @@ export default formData => (dispatch) => {
       payload: {
         isFetching: false,
         status: false,
-        message: error.response.data.message
+        message: 'Internal Server Error'
       }
     });
   });

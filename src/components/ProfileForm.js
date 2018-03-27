@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validator from 'validator';
 import { MdWarning, MdDone } from 'react-icons/lib/md';
+import helpers from '../helpers';
 import profileFormLoader from '../actions/profile-form-action';
 import Loading from '../components/Loading';
 
@@ -12,9 +13,11 @@ class ProfileForm extends Component {
     super(props);
 
     this.state = {
+      profileImage: null,
       status: false,
       formChanged: false,
       message: '',
+      nickname: '',
       name: '',
       oldPassword: '',
       password: '',
@@ -23,13 +26,22 @@ class ProfileForm extends Component {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onChangeProfileImage = this.onChangeProfileImage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this.state.status && !this.state.formChanged) {
       this.setState({ ...nextProps.data, message: '' });
     } else {
-      this.setState({ status: nextProps.status, message: nextProps.serverMessage });
+      if (nextProps.status) {
+        this.setState({
+          ...nextProps.data
+        });
+      }
+      this.setState({
+        status: nextProps.status,
+        message: nextProps.serverMessage
+      });
       this.resetForm(nextProps);
     }
   }
@@ -43,25 +55,34 @@ class ProfileForm extends Component {
     e.preventDefault();
 
     const {
+      nickname,
       name,
       oldPassword,
       password
     } = this.state;
 
-    const formData = {
+    const formData = helpers.formDataValTrim({
+      nickname,
       name,
       oldPassword,
       password
-    };
+    });
 
     this.setState({ status: false });
 
     if (this.onValidate()) {
-      if (validator.isEmpty(password)) {
-        delete formData.password;
-      }
+      if (formData) {
+        const data = new FormData();
+        data.append('nickname', formData.nickname);
+        data.append('name', formData.name);
+        data.append('oldPassword', formData.oldPassword);
 
-      if (formData) this.props.profileFormLoader(formData);
+        if (!validator.isEmpty(formData.password)) {
+          data.append('password', formData.password);
+        }
+
+        this.props.profileFormLoader(data);
+      }
     }
   }
 
@@ -94,6 +115,10 @@ class ProfileForm extends Component {
     }
 
     return true;
+  }
+
+  onChangeProfileImage(event) {
+    this.setState({ profileImage: event.target.files[0] });
   }
 
   resetForm(props) {
@@ -148,6 +173,7 @@ class ProfileForm extends Component {
     } = this.props;
 
     const {
+      nickname,
       name,
       oldPassword,
       password,
@@ -157,29 +183,40 @@ class ProfileForm extends Component {
     return (
       <div className="form-wrapper">
         { this.renderMessage() }
-        <form onSubmit={this.onSubmit}>
+        <form className="profile-form" onSubmit={this.onSubmit} encType="multipart/form-data">
           { isFetching && <Loading /> }
-          <label htmlFor="email">
-            <span>Email</span>
-            <div className="value">{ data.email } { this.emailActiveStatus() }</div>
-          </label>
-          <label htmlFor="name">
-            <span>Name</span>
-            <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
-          </label>
-          <label htmlFor="old-password">
-            <span>Old Password</span>
-            <input id="old-password" name="oldPassword" type="password" value={oldPassword} onChange={this.onChange} />
-          </label>
-          <label htmlFor="password">
-            <span>Password</span>
-            <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
-          </label>
-          <label htmlFor="confirm-password">
-            <span>Confirm password</span>
-            <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
-          </label>
-          <button type="submit" disabled={isFetching}>Save</button>
+          <div className="profile-image-container">
+            <label htmlFor="profile-image">
+              <input id="profile-image" name="profileImage" type="file" accept=".png, .jpg, .jpeg" onChange={this.onChangeProfileImage} />
+            </label>
+          </div>
+          <div className="form-inner">
+            <label htmlFor="email">
+              <span>Email</span>
+              <div className="value">{ data.email } { this.emailActiveStatus() }</div>
+            </label>
+            <label htmlFor="nickname">
+              <span>Nickname</span>
+              <input id="nickname" name="nickname" type="text" value={nickname} onChange={this.onChange} />
+            </label>
+            <label htmlFor="name">
+              <span>Name</span>
+              <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
+            </label>
+            <label htmlFor="old-password">
+              <span>Old Password</span>
+              <input id="old-password" name="oldPassword" type="password" value={oldPassword} onChange={this.onChange} />
+            </label>
+            <label htmlFor="password">
+              <span>Password</span>
+              <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
+            </label>
+            <label htmlFor="confirm-password">
+              <span>Confirm password</span>
+              <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
+            </label>
+            <button type="submit" disabled={isFetching}>Save Profile</button>
+          </div>
         </form>
       </div>
     );

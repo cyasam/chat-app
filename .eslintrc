@@ -16,6 +16,7 @@
     "Headers": true,
     "setTimeout": true,
     "localStorage": true,
-    "URLSearchParams": true
+    "URLSearchParams": true,
+    "FormData": true
   }
 }
