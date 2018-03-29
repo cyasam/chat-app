@@ -30,10 +30,7 @@ export default () => (dispatch) => {
           type: AUTH_SUCCESS,
           payload: {
             isFetching: false,
-            auth: {
-              status: result.data.status,
-              activated: result.data.activated
-            },
+            auth: result.data,
             message: ''
           }
         });

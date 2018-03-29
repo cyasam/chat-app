@@ -69,6 +69,24 @@ body {
     padding: 6px 8px;
     margin-top: 10px;
   }
+
+  // Chat screen 
+
+  &.chat {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+
+    label {
+      width: 100%;
+      margin-top: 0;
+    }
+
+    button {
+      padding: 0 20px;
+      margin-top: 0;
+    }
+  }
 }
 
 .success, .error {
@@ -132,5 +150,35 @@ body {
 
   .form-inner {
     width: 100%;
+  }
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  max-height: 300px;
+  overflow: auto;
+  padding: 10px;
+  margin: 0;
+  font-size: 13px;
+  border: 1px solid #bbb;
+
+  li {
+    list-style: none;
+    padding: 7px 10px;
+    margin: 0 0 10px 0;
+    background-color: #fff;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+
+    &.self {
+      background-color: #dcf8c6;
+      margin-left: auto;
+    }
+
+    &.others {
+      margin-right: auto;
+    }
   }
 }

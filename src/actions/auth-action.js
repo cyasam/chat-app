@@ -31,8 +31,8 @@ export default (email, password) => (dispatch) => {
         payload: {
           isFetching: false,
           auth: {
-            status: true,
-            activated: result.data.activated
+            status: result.data.status,
+            ...result.data.info
           },
           message: result.data.message
         }
