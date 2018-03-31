@@ -19,7 +19,7 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    this.socket = io('http://192.168.1.13:4567');
+    this.socket = io('http://localhost:4567');
     this.socket.on('connect', () => {
       this.setState({ connected: true });
       this.startSocket();
