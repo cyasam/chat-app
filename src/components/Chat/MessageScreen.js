@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 
 class MessageScreen extends Component {
   componentDidUpdate() {
-    this.messagesEl.scrollTop = this.messagesEl.offsetHeight;
+    if (this.messagesEl.scrollTop < this.messagesEl.offsetHeight) {
+      this.messagesEl.scrollTop = this.messagesEl.offsetHeight;
+    }
   }
 
   render() {
