@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import io from 'socket.io-client';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ActiveUsers from './ActiveUsers';
 import MessageScreen from './MessageScreen';
 import SenderForm from './SenderForm';
 
@@ -11,6 +11,7 @@ class Chat extends Component {
 
     this.state = {
       connected: false,
+      activeUsers: {},
       messageList: []
     };
 
@@ -18,11 +19,12 @@ class Chat extends Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
-  componentDidMount() {
-    this.socket = io('http://localhost:4567').on('connect', () => {
+  componentWillMount() {
+    this.socket = this.props.chatSocket;
+    if (this.socket.connected) {
       this.setState({ connected: true });
-    });
-    this.startSocket();
+      this.startSocket();
+    }
   }
 
   onSubmit(text) {
@@ -59,6 +61,10 @@ class Chat extends Component {
 
   startSocket() {
     this.socket.emit('add user', { email: this.props.email, nickname: this.props.nickname });
+    this.socket.on('active users', (activeUsers) => {
+      this.setState({ activeUsers });
+    });
+
     this.socket.on('new message', (message) => {
       const { messageList } = this.state;
       const newMessage = messageList.find(item =>
@@ -66,15 +72,16 @@ class Chat extends Component {
 
       if (newMessage) {
         const index = messageList.indexOf(newMessage);
-
         messageList[index].text = message.text;
         messageList[index].typing = false;
+        messageList[index].self = message.email === this.props.email;
 
         this.setState({ messageList });
       } else {
         const newMessageObj = { ...message };
         newMessageObj.id = messageList.length;
         newMessageObj.typing = false;
+        newMessageObj.self = message.email === this.props.email;
 
         this.setState({ messageList: [...this.state.messageList, newMessageObj] });
       }
@@ -85,7 +92,7 @@ class Chat extends Component {
       const message = this.state.messageList.find(item =>
         item.email === typingObj.email && item.typing);
 
-      if (!message) {
+      if (!message && typingObj.email !== this.props.email) {
         data.id = this.state.messageList.length;
         data.text = 'typing';
         data.typing = true;
@@ -98,7 +105,7 @@ class Chat extends Component {
       const message = this.state.messageList.filter(item =>
         item.email === typingObj.email && item.typing);
 
-      if (message.length) {
+      if (message.length && typingObj.email !== this.props.email) {
         const index = messageList.indexOf(message);
         messageList.splice(index, 1);
       }
@@ -118,8 +125,11 @@ class Chat extends Component {
 
     return (
       <div className="chat-screen">
-        <MessageScreen messageList={this.state.messageList} />
-        <SenderForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
+        <ActiveUsers activeUsers={this.state.activeUsers} />
+        <div className="chat-message-screen">
+          <MessageScreen messageList={this.state.messageList} />
+          <SenderForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
+        </div>
       </div>
     );
   }
@@ -127,7 +137,8 @@ class Chat extends Component {
 
 const mapStateToProps = state => ({
   nickname: state.authentication.auth.nickname,
-  email: state.authentication.auth.email
+  email: state.authentication.auth.email,
+  chatSocket: state.chatSocket
 });
 
 Chat.defaultProps = {
@@ -136,7 +147,8 @@ Chat.defaultProps = {
 
 Chat.propTypes = {
   nickname: PropTypes.string,
-  email: PropTypes.string.isRequired
+  email: PropTypes.string.isRequired,
+  chatSocket: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps)(Chat);

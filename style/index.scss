@@ -182,3 +182,39 @@ body {
     }
   }
 }
+
+.chat-screen {
+  display: flex;
+
+  .chat-message-screen {
+    width: 100%;
+  }
+}
+
+.user-list {
+  width: 250px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+  }
+
+  $bullet-size: 7px;
+
+  .status {
+    display: block;
+    width: $bullet-size;
+    height: $bullet-size;
+    margin-right: 6px;
+    border-radius: 100%;
+    background-color: #bbb;
+  
+    &.online {
+      background-color: #42b72a;
+    }
+  }
+}

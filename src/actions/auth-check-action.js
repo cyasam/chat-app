@@ -1,6 +1,7 @@
 import config from '../config';
 import requests from '../helpers/requests';
 import { AUTH_LOADING, AUTH_SUCCESS, AUTH_ERROR } from './auth-action';
+import { createSocket } from './chat-socket-action';
 
 export default () => (dispatch) => {
   dispatch({
@@ -26,6 +27,8 @@ export default () => (dispatch) => {
   } else {
     requests.api.get('/profile').then((result) => {
       if (result.data.status) {
+        dispatch(createSocket);
+
         dispatch({
           type: AUTH_SUCCESS,
           payload: {

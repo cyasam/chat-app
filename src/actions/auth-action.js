@@ -1,5 +1,6 @@
 import config from '../config';
 import requests from '../helpers/requests';
+import { createSocket } from './chat-socket-action';
 
 export const AUTH_LOADING = 'AUTH_LOADING';
 export const AUTH_SUCCESS = 'AUTH_SUCCESS';
@@ -26,6 +27,9 @@ export default (email, password) => (dispatch) => {
     if (result.data.status) {
       localStorage.setItem(config.TOKEN_KEY_NAME, result.data.token);
       requests.apiReInit();
+
+      dispatch(createSocket);
+
       dispatch({
         type: AUTH_SUCCESS,
         payload: {
