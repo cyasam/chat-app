@@ -218,3 +218,13 @@ body {
     }
   }
 }
+
+@media screen and (max-width: 759px) {
+  .chat-screen {
+    display: block;
+
+    .user-list {
+      margin-bottom: 15px;
+    }
+  }
+}
