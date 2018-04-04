@@ -3,6 +3,10 @@ import logger from 'redux-logger';
 import profileFormSuccess from './profile-form-success';
 import chatSocket from './chat-socket';
 
-export default [
-  thunk, chatSocket, profileFormSuccess, logger
-];
+const middlewares = [thunk, chatSocket, profileFormSuccess];
+
+if (process.env.NODE_ENV !== 'production') {
+  middlewares.push(logger);
+}
+
+export default middlewares;

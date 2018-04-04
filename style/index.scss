@@ -1,6 +1,10 @@
 @import 'node_modules/normalize-scss/sass/_normalize';
 @include normalize();
 
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
 body {
   font: 14px/1.2 Arial, sans-serif;
 }
@@ -51,8 +55,10 @@ body {
     margin-top: 10px;
 
     input {
+      width: 100%;
+      height: 32px;
       padding: 0 8px;
-      height: 30px;
+      font-size: 13px;
     }
 
     > span {
@@ -68,6 +74,7 @@ body {
   button {
     padding: 6px 8px;
     margin-top: 10px;
+    font-size: 13px;
   }
 
   // Chat screen 
@@ -124,6 +131,11 @@ body {
         color: #a94442;
       }
     }
+  }
+
+  button {
+    padding: 3px 8px;
+    font-size: 13px;
   }
 }
 
@@ -192,15 +204,18 @@ body {
 }
 
 .user-list {
-  width: 250px;
+  min-width: 120px;
+  max-width: 250px;
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 10px 0 0;
+  word-break: break-all;
 
   li {
     display: flex;
     align-items: center;
     padding: 4px;
+    font-size: 13px;
   }
 
   $bullet-size: 7px;
@@ -219,7 +234,7 @@ body {
   }
 }
 
-@media screen and (max-width: 759px) {
+@media screen and (max-width: 479px) {
   .chat-screen {
     display: block;
 

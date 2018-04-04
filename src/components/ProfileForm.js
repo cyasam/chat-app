@@ -13,6 +13,8 @@ class ProfileForm extends Component {
     super(props);
 
     this.state = {
+      minStringLength: 3,
+      minPasswordLength: 5,
       profileImage: null,
       status: false,
       formChanged: false,
@@ -88,13 +90,21 @@ class ProfileForm extends Component {
 
   onValidate() {
     const {
+      minStringLength,
+      minPasswordLength,
+      nickname,
       name,
       oldPassword,
       password,
       confirmPassword
     } = this.state;
 
-    if (!validator.isLength(name, { min: 2 })) {
+    if (!validator.isLength(nickname, { min: minStringLength })) {
+      this.setState({ message: 'Provide your nickname.' });
+      return false;
+    }
+
+    if (!validator.isLength(name, { min: minStringLength })) {
       this.setState({ message: 'Provide your name.' });
       return false;
     }
@@ -104,8 +114,8 @@ class ProfileForm extends Component {
       return false;
     }
 
-    if (validator.isLength(password, { min: 1, max: 4 })) {
-      this.setState({ message: 'Password length must be at least 5.' });
+    if (validator.isLength(password, { min: 1, max: minPasswordLength - 1 })) {
+      this.setState({ message: `Password length must be at least ${minPasswordLength}.` });
       return false;
     }
 
@@ -173,12 +183,15 @@ class ProfileForm extends Component {
     } = this.props;
 
     const {
+      profileImage,
       nickname,
       name,
       oldPassword,
       password,
       confirmPassword
     } = this.state;
+
+    console.log(profileImage);
 
     return (
       <div className="form-wrapper">
@@ -197,7 +210,7 @@ class ProfileForm extends Component {
             </label>
             <label htmlFor="nickname">
               <span>Nickname</span>
-              <input id="nickname" name="nickname" type="text" value={nickname} onChange={this.onChange} />
+              <div className="value">{nickname}</div>
             </label>
             <label htmlFor="name">
               <span>Name</span>

@@ -13,7 +13,7 @@ class MessageScreen extends Component {
       <ul className="messages" ref={(messagesEl) => { this.messagesEl = messagesEl; }}>
         { this.props.messageList.map(message => (
           <li className={message.self ? 'self' : 'others'} key={message.id}>
-            { message.text }
+            { message.nickname }: { message.text }
           </li>
           ))
         }

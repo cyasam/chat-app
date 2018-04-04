@@ -10,7 +10,6 @@ class Chat extends Component {
     super();
 
     this.state = {
-      connected: false,
       activeUsers: {},
       messageList: []
     };
@@ -21,10 +20,7 @@ class Chat extends Component {
 
   componentWillMount() {
     this.socket = this.props.chatSocket;
-    if (this.socket.connected) {
-      this.setState({ connected: true });
-      this.startSocket();
-    }
+    this.startSocket();
   }
 
   onSubmit(text) {
@@ -32,6 +28,7 @@ class Chat extends Component {
     const messageObj = {
       id: this.state.messageList.length,
       email: null,
+      nickname: this.props.nickname,
       text,
       typing: false,
       self: true
@@ -117,10 +114,6 @@ class Chat extends Component {
   render() {
     if (!this.props.email) {
       return null;
-    }
-
-    if (!this.state.connected) {
-      return <div>Chat is not connected.</div>;
     }
 
     return (
