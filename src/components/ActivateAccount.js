@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 const ActivateAccount = props => (
   <Fragment>
-    { !props.auth.activated && props.auth.status ? <div className="success">Please activate your account.</div> : null }
+    { !props.auth.activated && props.auth.status ? <div className="error">Please activate your account.</div> : null }
   </Fragment>
 );
 

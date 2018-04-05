@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Chat from '../components/Chat';
 
 const Home = ({ auth }) => (
-  <div className="home-page">
+  <Fragment>
     { auth.status ? (
       <Chat />
     ) : (
-      <div>Welcome to my humble in</div>
+      <div className="page-container">Welcome to my humble in</div>
     )}
-  </div>
+  </Fragment>
 );
 
 const mapStateToProps = state => ({

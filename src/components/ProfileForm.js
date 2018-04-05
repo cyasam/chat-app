@@ -7,6 +7,7 @@ import { MdWarning, MdDone } from 'react-icons/lib/md';
 import helpers from '../helpers';
 import profileFormLoader from '../actions/profile-form-action';
 import Loading from '../components/Loading';
+import ProfileImage from './ProfileImage';
 
 class ProfileForm extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ class ProfileForm extends Component {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.onChangeProfileImage = this.onChangeProfileImage.bind(this);
+    this.onChangeFile = this.onChangeFile.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -53,6 +54,11 @@ class ProfileForm extends Component {
     this.setState({ formChanged: true, [name]: value });
   }
 
+  onChangeFile(e) {
+    const { name, files } = e.target;
+    this.setState({ formChanged: true, [name]: files[0] });
+  }
+
   onSubmit(e) {
     e.preventDefault();
 
@@ -60,7 +66,8 @@ class ProfileForm extends Component {
       nickname,
       name,
       oldPassword,
-      password
+      password,
+      profileImage
     } = this.state;
 
     const formData = helpers.formDataValTrim({
@@ -78,6 +85,10 @@ class ProfileForm extends Component {
         data.append('nickname', formData.nickname);
         data.append('name', formData.name);
         data.append('oldPassword', formData.oldPassword);
+
+        if (profileImage) {
+          data.append('profileImage', profileImage);
+        }
 
         if (!validator.isEmpty(formData.password)) {
           data.append('password', formData.password);
@@ -125,10 +136,6 @@ class ProfileForm extends Component {
     }
 
     return true;
-  }
-
-  onChangeProfileImage(event) {
-    this.setState({ profileImage: event.target.files[0] });
   }
 
   resetForm(props) {
@@ -183,7 +190,6 @@ class ProfileForm extends Component {
     } = this.props;
 
     const {
-      profileImage,
       nickname,
       name,
       oldPassword,
@@ -191,17 +197,13 @@ class ProfileForm extends Component {
       confirmPassword
     } = this.state;
 
-    console.log(profileImage);
-
     return (
       <div className="form-wrapper">
         { this.renderMessage() }
         <form className="profile-form" onSubmit={this.onSubmit} encType="multipart/form-data">
           { isFetching && <Loading /> }
           <div className="profile-image-container">
-            <label htmlFor="profile-image">
-              <input id="profile-image" name="profileImage" type="file" accept=".png, .jpg, .jpeg" onChange={this.onChangeProfileImage} />
-            </label>
+            <ProfileImage onChange={this.onChangeFile} />
           </div>
           <div className="form-inner">
             <label htmlFor="email">

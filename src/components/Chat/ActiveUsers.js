@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Loading from '../Loading';
 import getUsersList from '../../actions/get-users-list-action';
 
 class ActiveUsers extends Component {
@@ -12,18 +11,26 @@ class ActiveUsers extends Component {
   renderUsers(user) {
     const { activeUsers } = this.props;
     const activeUser = Object.keys(activeUsers).find(id => activeUsers[id].email === user.email);
-    return <li key={user.id}><span className={`status ${activeUser ? 'online' : 'offline'}`} />{ user.nickname }</li>;
+    return (
+      <li key={user.id}>
+        { user.profileImage ? <img src={user.profileImage} alt={user.nickname} /> : <div className="anonymous-thumb" /> }
+        { user.nickname } <span className={`status ${activeUser ? 'online' : 'offline'}`} />
+      </li>
+    );
   }
 
   render() {
     const { isFetching, users } = this.props;
 
     return (
-      <div style={{ position: 'relative' }}>
-        { isFetching && <Loading /> }
-        <ul className="user-list">
-          { users.map(user => this.renderUsers(user)) }
-        </ul>
+      <div className="users-list-wrapper">
+        { isFetching ? (
+          <p>Loading...</p>
+        ) : (
+          <ul className="user-list">
+            { users.map(user => this.renderUsers(user)) }
+          </ul>
+        )}
       </div>
     );
   }

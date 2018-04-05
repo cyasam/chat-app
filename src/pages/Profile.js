@@ -18,9 +18,9 @@ class Profile extends Component {
       data
     } = this.props;
     return (
-      <div style={{ position: 'relative', minHeight: 50 }}>
+      <div className="page-container">
         { message && <div className="error">{message}</div> }
-        { isFetching && <Loading /> }
+        { isFetching && <Loading className="app" /> }
         <ProfileForm data={data} />
       </div>
     );

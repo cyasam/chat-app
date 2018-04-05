@@ -18,8 +18,8 @@ const AppContainer = props => (
     <div className="wrapper">
       { !Object.keys(props.auth).length && <Loading className="app" /> }
       <Header />
+      <ActivateAccount />
       <div className="container">
-        <ActivateAccount />
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/register" component={RegisterIndex} />

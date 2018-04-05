@@ -3,9 +3,7 @@ import PropTypes from 'prop-types';
 
 class MessageScreen extends Component {
   componentDidUpdate() {
-    if (this.messagesEl.scrollTop < this.messagesEl.offsetHeight) {
-      this.messagesEl.scrollTop = this.messagesEl.offsetHeight;
-    }
+    this.messagesEl.scrollTop = this.messagesEl.offsetHeight;
   }
 
   render() {
@@ -13,7 +11,8 @@ class MessageScreen extends Component {
       <ul className="messages" ref={(messagesEl) => { this.messagesEl = messagesEl; }}>
         { this.props.messageList.map(message => (
           <li className={message.self ? 'self' : 'others'} key={message.id}>
-            { message.nickname }: { message.text }
+            <div className="info">{ message.nickname }</div>
+            <p className="text">{ message.text }</p>
           </li>
           ))
         }

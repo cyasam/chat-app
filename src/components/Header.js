@@ -11,11 +11,6 @@ const Header = props => (
       { props.auth.status ? (
         <Fragment>
           <Link to="/profile">Profile</Link>
-          <button
-            onClick={props.logout}
-          >
-            Logout
-          </button>
         </Fragment>
       ) : (
         <Fragment>
@@ -24,6 +19,11 @@ const Header = props => (
         </Fragment>
       )}
     </nav>
+    { props.auth.status && (
+      <button onClick={props.logout}>
+        Logout
+      </button>
+    )}
   </header>
 );
 
