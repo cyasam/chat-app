@@ -29,6 +29,7 @@ class Chat extends Component {
       id: this.state.messageList.length,
       email: null,
       nickname: this.props.nickname,
+      profileImage: this.props.profileImage,
       text,
       typing: false,
       self: true
@@ -56,6 +57,10 @@ class Chat extends Component {
     }, 600);
   }
 
+  getProfileImage(email) {
+    return this.props.users.find(user => user.email === email).profileImage;
+  }
+
   startSocket() {
     this.socket.emit('add user', { email: this.props.email, nickname: this.props.nickname });
     this.socket.on('active users', (activeUsers) => {
@@ -71,6 +76,7 @@ class Chat extends Component {
         const index = messageList.indexOf(newMessage);
         messageList[index].text = message.text;
         messageList[index].typing = false;
+        messageList[index].profileImage = this.getProfileImage(message.email);
         messageList[index].self = message.email === this.props.email;
 
         this.setState({ messageList });
@@ -78,6 +84,7 @@ class Chat extends Component {
         const newMessageObj = { ...message };
         newMessageObj.id = messageList.length;
         newMessageObj.typing = false;
+        newMessageObj.profileImage = this.getProfileImage(message.email);
         newMessageObj.self = message.email === this.props.email;
 
         this.setState({ messageList: [...this.state.messageList, newMessageObj] });
@@ -93,6 +100,7 @@ class Chat extends Component {
         data.id = this.state.messageList.length;
         data.text = 'typing';
         data.typing = true;
+        data.profileImage = this.getProfileImage(typingObj.email);
         this.setState({ messageList: [...this.state.messageList, data] });
       }
     });
@@ -131,7 +139,9 @@ class Chat extends Component {
 const mapStateToProps = state => ({
   nickname: state.authentication.auth.nickname,
   email: state.authentication.auth.email,
-  chatSocket: state.chatSocket
+  profileImage: state.authentication.auth.profileImage,
+  chatSocket: state.chatSocket,
+  users: state.usersList.users
 });
 
 Chat.defaultProps = {
@@ -141,7 +151,9 @@ Chat.defaultProps = {
 Chat.propTypes = {
   nickname: PropTypes.string,
   email: PropTypes.string.isRequired,
-  chatSocket: PropTypes.object.isRequired
+  profileImage: PropTypes.string.isRequired,
+  chatSocket: PropTypes.object.isRequired,
+  users: PropTypes.array.isRequired
 };
 
 export default connect(mapStateToProps)(Chat);

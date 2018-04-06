@@ -17,8 +17,8 @@ class ProfileForm extends Component {
       minStringLength: 3,
       minPasswordLength: 5,
       profileImage: null,
-      status: false,
-      formChanged: false,
+      firstLoad: true,
+      formStatus: false,
       message: '',
       nickname: '',
       name: '',
@@ -33,30 +33,31 @@ class ProfileForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.state.status && !this.state.formChanged) {
-      this.setState({ ...nextProps.data, message: '' });
+    if (!this.state.formStatus && this.state.firstLoad) {
+      this.setState({ ...nextProps.data, firstLoad: false, message: '' });
     } else {
-      if (nextProps.status) {
+      if (nextProps.formStatus) {
         this.setState({
           ...nextProps.data
         });
       }
-      this.setState({
-        status: nextProps.status,
-        message: nextProps.serverMessage
-      });
       this.resetForm(nextProps);
     }
+
+    this.setState({
+      formStatus: nextProps.formStatus,
+      message: nextProps.serverMessage
+    });
   }
 
   onChange(e) {
     const { name, value } = e.target;
-    this.setState({ formChanged: true, [name]: value });
+    this.setState({ [name]: value });
   }
 
   onChangeFile(e) {
     const { name, files } = e.target;
-    this.setState({ formChanged: true, [name]: files[0] });
+    this.setState({ [name]: files[0] });
   }
 
   onSubmit(e) {
@@ -77,7 +78,7 @@ class ProfileForm extends Component {
       password
     });
 
-    this.setState({ status: false });
+    this.setState({ formStatus: false });
 
     if (this.onValidate()) {
       if (formData) {
@@ -139,7 +140,7 @@ class ProfileForm extends Component {
   }
 
   resetForm(props) {
-    if (props.status) {
+    if (props.data.status) {
       const resetObj = {
         oldPassword: '',
         password: '',
@@ -173,12 +174,12 @@ class ProfileForm extends Component {
   renderMessage() {
     const {
       message,
-      status,
+      formStatus,
     } = this.state;
 
     return (
       <Fragment>
-        { message && <div className={status ? 'success' : 'error'}>{message}</div> }
+        { message && <div className={formStatus ? 'success' : 'error'}>{message}</div> }
       </Fragment>
     );
   }
@@ -240,13 +241,13 @@ class ProfileForm extends Component {
 
 const mapStateToProps = state => ({
   isFetching: state.profileForm.isFetching,
-  status: state.profileForm.status,
+  formStatus: state.profileForm.status,
   serverMessage: state.profileForm.message
 });
 
 ProfileForm.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  status: PropTypes.bool.isRequired,
+  formStatus: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
   serverMessage: PropTypes.string.isRequired,
   profileFormLoader: PropTypes.func.isRequired

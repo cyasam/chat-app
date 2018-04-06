@@ -13,7 +13,7 @@ class ActiveUsers extends Component {
     const activeUser = Object.keys(activeUsers).find(id => activeUsers[id].email === user.email);
     return (
       <li key={user.id}>
-        { user.profileImage ? <img src={user.profileImage} alt={user.nickname} /> : <div className="anonymous-thumb" /> }
+        { user.profileImage ? <img className="thumb-img" src={user.profileImage} alt={user.nickname} /> : <div className="anonymous-thumb" /> }
         { user.nickname } <span className={`status ${activeUser ? 'online' : 'offline'}`} />
       </li>
     );
