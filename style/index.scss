@@ -351,9 +351,14 @@ $thumb-size: 30px;
   border-color: #ebccd1;
 }
 
+.success, .error {
+  margin-bottom: 20px;
+}
+
 // Forms
 .form-wrapper {
   position: relative;
+  min-width: 400px;
 
   label {
     display: flex;
@@ -381,10 +386,6 @@ $thumb-size: 30px;
 
   button {
     margin-top: 10px;
-  }
-
-  .success, .error {
-    margin-bottom: 20px;
   }
 
   // Chat screen
@@ -498,7 +499,7 @@ $thumb-size: 30px;
   margin: 0 auto;
 }
 
-.profile-form {
+.profile-form-wrapper {
   display: flex;
 
   .profile-image-container {

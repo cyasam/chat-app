@@ -23,7 +23,6 @@ class ProfileForm extends Component {
       message: '',
       nickname: '',
       name: '',
-      oldPassword: '',
       password: '',
       confirmPassword: ''
     };
@@ -45,7 +44,8 @@ class ProfileForm extends Component {
     } else {
       if (nextProps.formStatus) {
         this.setState({
-          ...nextProps.data
+          ...nextProps.data,
+          profileImageOld: nextProps.data.profileImage
         });
       }
       this.resetForm(nextProps);
@@ -72,7 +72,6 @@ class ProfileForm extends Component {
     const {
       nickname,
       name,
-      oldPassword,
       password,
       profileImage
     } = this.state;
@@ -80,7 +79,6 @@ class ProfileForm extends Component {
     const formData = helpers.formDataValTrim({
       nickname,
       name,
-      oldPassword,
       password
     });
 
@@ -91,7 +89,6 @@ class ProfileForm extends Component {
         const data = new FormData();
         data.append('nickname', formData.nickname);
         data.append('name', formData.name);
-        data.append('oldPassword', formData.oldPassword);
 
         if (profileImage) {
           data.append('profileImage', profileImage);
@@ -112,7 +109,6 @@ class ProfileForm extends Component {
       minPasswordLength,
       nickname,
       name,
-      oldPassword,
       password,
       confirmPassword
     } = this.state;
@@ -124,11 +120,6 @@ class ProfileForm extends Component {
 
     if (!validator.isLength(name, { min: minStringLength })) {
       this.setState({ message: 'Provide your name.' });
-      return false;
-    }
-
-    if (validator.isEmpty(oldPassword)) {
-      this.setState({ message: 'Provide old password.' });
       return false;
     }
 
@@ -152,7 +143,6 @@ class ProfileForm extends Component {
   resetForm(props) {
     if (props.data.status) {
       const resetObj = {
-        oldPassword: '',
         password: '',
         confirmPassword: ''
       };
@@ -203,52 +193,50 @@ class ProfileForm extends Component {
     const {
       nickname,
       name,
-      oldPassword,
       password,
       confirmPassword
     } = this.state;
 
     return (
-      <div className="form-wrapper">
+      <Fragment>
         { this.renderMessage() }
-        <form className="profile-form" onSubmit={this.onSubmit} encType="multipart/form-data">
-          { isFetching && <Loading /> }
+        { isFetching && <Loading /> }
+        <div className="profile-form-wrapper">
           <div className="profile-image-container">
             <ProfileImage
               oldImage={this.state.profileImageOld}
+              onSubmit={this.onSubmit}
               onChange={this.onChangeProfileImage}
               resetImage={this.resetImage}
             />
           </div>
-          <div className="form-inner">
-            <label htmlFor="email">
-              <span>Email</span>
-              <div className="value">{ data.email } { this.emailActiveStatus() }</div>
-            </label>
-            <label htmlFor="nickname">
-              <span>Nickname</span>
-              <div className="value">{nickname}</div>
-            </label>
-            <label htmlFor="name">
-              <span>Name</span>
-              <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
-            </label>
-            <label htmlFor="old-password">
-              <span>Old Password</span>
-              <input id="old-password" name="oldPassword" type="password" value={oldPassword} onChange={this.onChange} />
-            </label>
-            <label htmlFor="password">
-              <span>Password</span>
-              <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
-            </label>
-            <label htmlFor="confirm-password">
-              <span>Confirm password</span>
-              <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
-            </label>
-            <button type="submit" disabled={isFetching}>Save Profile</button>
-          </div>
-        </form>
-      </div>
+          <form className="form-wrapper" onSubmit={this.onSubmit}>
+            <div className="form-inner">
+              <label htmlFor="email">
+                <span>Email</span>
+                <div className="value">{ data.email } { this.emailActiveStatus() }</div>
+              </label>
+              <label htmlFor="nickname">
+                <span>Nickname</span>
+                <div className="value">{nickname}</div>
+              </label>
+              <label htmlFor="name">
+                <span>Name</span>
+                <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
+              </label>
+              <label htmlFor="password">
+                <span>Password</span>
+                <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
+              </label>
+              <label htmlFor="confirm-password">
+                <span>Confirm password</span>
+                <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
+              </label>
+              <button type="submit" disabled={isFetching}>Save Profile</button>
+            </div>
+          </form>
+        </div>
+      </Fragment>
     );
   }
 }

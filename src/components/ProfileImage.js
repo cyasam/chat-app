@@ -11,12 +11,24 @@ class ProfileImage extends Component {
       previewImage: false
     };
 
+    this.onSubmit = this.onSubmit.bind(this);
     this.onChangeProfileImage = this.onChangeProfileImage.bind(this);
     this.resetImage = this.resetImage.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.oldImage !== nextProps.oldImage) {
+      this.setState({ previewImage: false });
+    }
+  }
+
   onChangeProfileImage(event) {
     this.previewImage(event);
+  }
+
+  onSubmit(event) {
+    event.preventDefault();
+    this.props.onSubmit(event);
   }
 
   croppingInit(image) {
@@ -79,10 +91,11 @@ class ProfileImage extends Component {
 
   render() {
     return (
-      <div className="profile-image-box">
+      <form className="profile-image-box" onSubmit={this.onSubmit} encType="multipart/form-data">
         { this.state.previewImage ? (
           <div className="preview-box-container">
             <div className="preview-box" ref={(profileImageBox) => { this.profileImageBox = profileImageBox; }} />
+            <button className="button">Save</button>
             <div className="button" role="link" onClick={this.resetImage} onKeyDown={this.resetImage} tabIndex={0}>Cancel</div>
           </div>
         ) : (
@@ -91,13 +104,18 @@ class ProfileImage extends Component {
             <input id="profile-image-input" name="profileImage" type="file" accept=".png, .jpg, .jpeg" onChange={this.onChangeProfileImage} />
           </label>
         )}
-      </div>
+      </form>
     );
   }
 }
 
+ProfileImage.defaultProps = {
+  oldImage: ''
+};
+
 ProfileImage.propTypes = {
-  oldImage: PropTypes.string.isRequired,
+  oldImage: PropTypes.string,
+  onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   resetImage: PropTypes.func.isRequired
 };
