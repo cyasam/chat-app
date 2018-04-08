@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "croppie": "^2.6.2",
     "lodash": "^4.17.5",
     "normalize-scss": "^7.0.1",
     "prop-types": "^15.6.1",

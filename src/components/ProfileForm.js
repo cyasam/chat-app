@@ -16,6 +16,7 @@ class ProfileForm extends Component {
     this.state = {
       minStringLength: 3,
       minPasswordLength: 5,
+      profileImageOld: null,
       profileImage: null,
       firstLoad: true,
       formStatus: false,
@@ -29,12 +30,18 @@ class ProfileForm extends Component {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.onChangeFile = this.onChangeFile.bind(this);
+    this.onChangeProfileImage = this.onChangeProfileImage.bind(this);
+    this.resetImage = this.resetImage.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     if (!this.state.formStatus && this.state.firstLoad) {
-      this.setState({ ...nextProps.data, firstLoad: false, message: '' });
+      this.setState({
+        ...nextProps.data,
+        profileImageOld: nextProps.data.profileImage,
+        firstLoad: false,
+        message: ''
+      });
     } else {
       if (nextProps.formStatus) {
         this.setState({
@@ -55,9 +62,8 @@ class ProfileForm extends Component {
     this.setState({ [name]: value });
   }
 
-  onChangeFile(e) {
-    const { name, files } = e.target;
-    this.setState({ [name]: files[0] });
+  onChangeProfileImage(name, image) {
+    this.setState({ [name]: image });
   }
 
   onSubmit(e) {
@@ -139,6 +145,10 @@ class ProfileForm extends Component {
     return true;
   }
 
+  resetImage(name) {
+    this.setState({ [name]: this.state[`${name}Old`] });
+  }
+
   resetForm(props) {
     if (props.data.status) {
       const resetObj = {
@@ -204,7 +214,11 @@ class ProfileForm extends Component {
         <form className="profile-form" onSubmit={this.onSubmit} encType="multipart/form-data">
           { isFetching && <Loading /> }
           <div className="profile-image-container">
-            <ProfileImage onChange={this.onChangeFile} />
+            <ProfileImage
+              oldImage={this.state.profileImageOld}
+              onChange={this.onChangeProfileImage}
+              resetImage={this.resetImage}
+            />
           </div>
           <div className="form-inner">
             <label htmlFor="email">

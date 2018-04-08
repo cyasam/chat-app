@@ -11,12 +11,14 @@
     "react/forbid-prop-types": "off"
   },
   "globals": {
+    "window": true,
     "document": true,
     "fetch": true,
     "Headers": true,
     "setTimeout": true,
     "localStorage": true,
     "URLSearchParams": true,
-    "FormData": true
+    "FormData": true,
+    "Image": true
   }
 }
