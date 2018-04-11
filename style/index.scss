@@ -412,43 +412,55 @@ $thumb-size: 30px;
 }
 
 // Profile Thumbnail
-.profile-image-box {
-  display: block;
-  overflow: hidden;
+$profile-image-size: 200px;
+.profile-image-container {
+  width: $profile-image-size;
+  align-self: flex-start;
+  margin-right: 20px;
 
-  label {
+  .profile-image-box {
     display: block;
-    margin-bottom: 0;
-    cursor: pointer;
-  }
+    overflow: hidden;
 
-  .preview-box-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
+    label {
+      display: block;
+      height: $profile-image-size;
+      margin-bottom: 0;
+      cursor: pointer;
+    }
 
-    .preview-box {
+    .preview-box-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .preview-box {
+        background-color: #503a8f;
+      }
+
+      .button {
+        margin-top: 10px;
+        text-align: center;
+      }
+    }
+
+    .profile-placeholder {
+      width: $profile-image-size;
+      height: $profile-image-size;
       background-color: #503a8f;
     }
 
-    .button {
-      margin-top: 10px;
-      text-align: center;
+    input[type=file] {
+      width: 0;
+      position: absolute;
+      z-index: -1;
+      opacity: 0;
     }
   }
+}
 
-  .profile-placeholder {
-    width: 200px;
-    height: 200px;
-    background-color: #503a8f;
-  }
-
-  input[type=file] {
-    width: 0;
-    position: absolute;
-    z-index: -1;
-    opacity: 0;
-  }
+.activation-warning {
+  margin-bottom: 0;
 }
 
 // App
@@ -501,12 +513,6 @@ $thumb-size: 30px;
 
 .profile-form-wrapper {
   display: flex;
-
-  .profile-image-container {
-    max-width: 200px;
-    align-self: flex-start;
-    margin-right: 20px;
-  }
 
   .form-inner {
     width: 100%;

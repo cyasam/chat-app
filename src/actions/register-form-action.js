@@ -43,7 +43,7 @@ export default fetchData => (dispatch) => {
       payload: {
         isFetching: false,
         status: false,
-        message: error.response.data.message
+        message: error.response.data.message || 'Internal Server Error'
       }
     });
   });

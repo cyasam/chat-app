@@ -100,7 +100,11 @@ class ProfileImage extends Component {
           </div>
         ) : (
           <label htmlFor="profile-image-input">
-            <img src={this.changeImageNameStr()} className="profile-placeholder" alt="" />
+            { this.props.oldImage ? (
+              <img src={this.changeImageNameStr()} className="profile-placeholder" alt="" />
+            ) : (
+              <div className="profile-placeholder" />
+            )}
             <input id="profile-image-input" name="profileImage" type="file" accept=".png, .jpg, .jpeg" onChange={this.onChangeProfileImage} />
           </label>
         )}
