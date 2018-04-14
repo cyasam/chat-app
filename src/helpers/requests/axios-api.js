@@ -3,7 +3,7 @@ import config from '../../config';
 
 const init = () => {
   const instance = axios.create({
-    baseURL: 'http://192.168.1.13:4567/api',
+    baseURL: `${config.API_URL}/api`,
     timeout: 2000
   });
 

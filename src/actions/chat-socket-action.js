@@ -1,11 +1,12 @@
 import io from 'socket.io-client';
+import config from '../config';
 
 export const CREATE_SOCKET = 'CREATE_SOCKET';
 export const REMOVE_SOCKET = 'REMOVE_SOCKET';
 
 export const createSocket = {
   type: CREATE_SOCKET,
-  payload: io('http://192.168.1.13:4567', {
+  payload: io(config.API_URL, {
     autoConnect: false
   })
 };
