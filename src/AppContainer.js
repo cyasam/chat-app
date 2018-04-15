@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,14 +12,27 @@ import Home from './pages/Home';
 import RegisterIndex from './pages/register';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import ActiveUsers from './components/Chat/ActiveUsers';
 
 const AppContainer = props => (
   <Router>
     <div className="wrapper">
-      { !Object.keys(props.auth).length && <Loading className="app" /> }
       <Header />
-      <ActivateAccount />
+      { props.auth.status && <ActivateAccount /> }
       <div className="container">
+        { Object.keys(props.auth).length > 0 ?
+          ( 
+            <Fragment>
+              { props.auth.status && (
+                <Fragment>
+                  <ActiveUsers />
+                </Fragment>
+              ) }
+            </Fragment>
+          ) : (
+            <Loading className="app" /> 
+          )
+        }
         <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/register" component={RegisterIndex} />

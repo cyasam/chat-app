@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import ActiveUsers from './ActiveUsers';
 import MessageScreen from './MessageScreen';
 import SenderForm from './SenderForm';
 
@@ -10,7 +9,6 @@ class Chat extends Component {
     super();
 
     this.state = {
-      activeUsers: {},
       messageList: []
     };
 
@@ -63,9 +61,6 @@ class Chat extends Component {
 
   startSocket() {
     this.socket.emit('add user', { email: this.props.email, nickname: this.props.nickname });
-    this.socket.on('active users', (activeUsers) => {
-      this.setState({ activeUsers });
-    });
 
     this.socket.on('new message', (message) => {
       const { messageList } = this.state;
@@ -126,7 +121,6 @@ class Chat extends Component {
 
     return (
       <div className="chat-screen">
-        <ActiveUsers activeUsers={this.state.activeUsers} />
         <div className="chat-message-screen">
           <MessageScreen messageList={this.state.messageList} />
           <SenderForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />

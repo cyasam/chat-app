@@ -4,13 +4,27 @@ import { connect } from 'react-redux';
 import getUsersList from '../../actions/get-users-list-action';
 
 class ActiveUsers extends Component {
+  constructor() {
+    super();
+    
+    this.state = {
+      activeUsers: {}
+    };
+  }
+
   componentWillMount() {
     this.props.getUsersList();
+
+    this.socket = this.props.chatSocket;
+    this.socket.on('active users', (activeUsers) => {
+      this.setState({ activeUsers });
+    });
   }
 
   renderUsers(user) {
-    const { activeUsers } = this.props;
+    const { activeUsers } = this.state;
     const activeUser = Object.keys(activeUsers).find(id => activeUsers[id].email === user.email);
+
     return (
       <li key={user.id}>
         { user.profileImage ? <img className="thumb-img" src={user.profileImage} alt={user.nickname} /> : <div className="anonymous-thumb" /> }
@@ -39,15 +53,16 @@ class ActiveUsers extends Component {
 const mapStateToProps = state => ({
   isFetching: state.usersList.isFetching,
   users: state.usersList.users,
-  menuOpen: state.menuOpen.status
+  menuOpen: state.menuOpen.status,
+  chatSocket: state.chatSocket
 });
 
 ActiveUsers.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   users: PropTypes.array.isRequired,
   menuOpen: PropTypes.bool.isRequired,
-  activeUsers: PropTypes.object.isRequired,
-  getUsersList: PropTypes.func.isRequired
+  getUsersList: PropTypes.func.isRequired,
+  chatSocket: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, { getUsersList })(ActiveUsers);

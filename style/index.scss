@@ -514,6 +514,7 @@ $profile-image-size: 200px;
 .main-header {
   display: flex;
   align-items: center;
+  width: 100%;
   height: 70px;
   padding: 0 20px;
   background-color: #35275d;
@@ -661,22 +662,22 @@ $profile-image-size: 200px;
     display: inline-block;
   }
   
+  .users-list-wrapper {
+    position: fixed;
+    width: 100%;
+    max-width: 100%;
+    z-index: 10;
+    transform: translate3d(-100%, 0, 0);
+
+    transition: transform 0.3s ease-out;
+
+    &.open {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
   .chat-screen {
     display: block;
-
-    .users-list-wrapper {
-      position: fixed;
-      width: 100%;
-      max-width: 100%;
-      z-index: 10;
-      transform: translate3d(-100%, 0, 0);
-
-      transition: transform 0.3s ease-out;
-
-      &.open {
-        transform: translate3d(0, 0, 0);
-      }
-    }
   }
 
   .profile-form-wrapper {
