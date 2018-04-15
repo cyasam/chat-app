@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -143,9 +143,9 @@ class Register extends Component {
     } = this.state;
 
     return (
-      <div className="form-wrapper">
+      <Fragment>
         { message && <div className={status ? 'success' : 'error'}>{message}</div> }
-        <form onSubmit={this.onSubmit}>
+        <form className="form-wrapper" onSubmit={this.onSubmit}>
           { isFetching && <Loading /> }
           <NicknameInput value={nickname} minLength={minStringLength} onChange={this.onChange} />
           <label htmlFor="email">
@@ -166,7 +166,7 @@ class Register extends Component {
           </label>
           <button type="submit" disabled={isFetching}>SignUp</button>
         </form>
-      </div>
+      </Fragment>
     );
   }
 }

@@ -83,9 +83,9 @@ class Login extends Component {
     } = this.state;
 
     return (
-      <div className="form-wrapper page-container">
+      <div className="page-container">
         { message && <div className={auth.status ? 'success' : 'error'}>{message}</div> }
-        <form onSubmit={this.onSubmit}>
+        <form className="form-wrapper" onSubmit={this.onSubmit}>
           { isFetching && <Loading /> }
           <label htmlFor="email">
             <span>Email</span>

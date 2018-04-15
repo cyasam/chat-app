@@ -358,7 +358,7 @@ $thumb-size: 30px;
 // Forms
 .form-wrapper {
   position: relative;
-  min-width: 400px;
+  max-width: 400px;
 
   label {
     display: flex;
