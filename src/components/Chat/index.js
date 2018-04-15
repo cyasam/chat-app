@@ -121,10 +121,8 @@ class Chat extends Component {
 
     return (
       <div className="chat-screen">
-        <div className="chat-message-screen">
-          <MessageScreen messageList={this.state.messageList} />
-          <SenderForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
-        </div>
+        <MessageScreen messageList={this.state.messageList} />
+        <SenderForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
       </div>
     );
   }

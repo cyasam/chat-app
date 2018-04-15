@@ -144,9 +144,9 @@ class Register extends Component {
 
     return (
       <Fragment>
+        { isFetching && <Loading className="app" /> }
         { message && <div className={status ? 'success' : 'error'}>{message}</div> }
         <form className="form-wrapper" onSubmit={this.onSubmit}>
-          { isFetching && <Loading /> }
           <NicknameInput value={nickname} minLength={minStringLength} onChange={this.onChange} />
           <label htmlFor="email">
             <span>Email</span>

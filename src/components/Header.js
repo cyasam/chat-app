@@ -8,34 +8,36 @@ import clickMenu from '../actions/menu-click-action';
 
 const Header = props => (
   <header className="main-header">
-    <nav>
-      { props.auth.status &&
-        <button
-          className="menu-btn"
-          onClick={() => {
-            props.clickMenu();
-          }}
-        >
-          <MdMenu />
+    <div className="header-inner">
+      <nav>
+        { props.auth.status &&
+          <button
+            className="menu-btn"
+            onClick={() => {
+              props.clickMenu();
+            }}
+          >
+            <MdMenu />
+          </button>
+        }
+        <Link to="/">Home</Link>
+        { props.auth.status ? (
+          <Fragment>
+            <Link to="/profile">Profile</Link>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <Link to="/register">Register</Link>
+            <Link to="/login">Login</Link>
+          </Fragment>
+        )}
+      </nav>
+      { props.auth.status && (
+        <button className="logout-btn" onClick={props.logout}>
+          Logout
         </button>
-      }
-      <Link to="/">Home</Link>
-      { props.auth.status ? (
-        <Fragment>
-          <Link to="/profile">Profile</Link>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <Link to="/register">Register</Link>
-          <Link to="/login">Login</Link>
-        </Fragment>
       )}
-    </nav>
-    { props.auth.status && (
-      <button className="logout-btn" onClick={props.logout}>
-        Logout
-      </button>
-    )}
+    </div>
   </header>
 );
 

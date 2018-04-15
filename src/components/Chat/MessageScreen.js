@@ -11,10 +11,12 @@ class MessageScreen extends Component {
       <ul className="messages" ref={(messagesEl) => { this.messagesEl = messagesEl; }}>
         { this.props.messageList.map(message => (
           <li className={message.self ? 'self' : 'others'} key={message.id}>
-            { message.profileImage ? <img className="thumb-img" src={message.profileImage} alt={message.nickname} /> : <div className="anonymous-thumb" /> }
-            <div className="detail">
-              <div className="info">{ message.nickname }</div>
-              <p className="text">{ message.text }</p>
+            <div className="message-content">
+              { message.profileImage ? <img className="thumb-img" src={message.profileImage} alt={message.nickname} /> : <div className="anonymous-thumb" /> }
+              <div className="detail">
+                <div className="info">{ message.nickname }</div>
+                <p className="text">{ message.text }</p>
+              </div>
             </div>
           </li>
           ))

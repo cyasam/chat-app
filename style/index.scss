@@ -253,6 +253,11 @@ content: 'â†º';
 content: 'â†»';
 }
 
+
+// General
+
+$input-text-height: 40px;
+
 *, *:before, *:after {
   box-sizing: border-box;
 }
@@ -324,7 +329,7 @@ $thumb-size: 30px;
 .thumb-img, .anonymous-thumb {
   width: $thumb-size;
   height: auto;
-  align-self: center;
+  align-self: flex-start;
   margin-right: 10px;
   border-radius: 100%;
 }
@@ -368,7 +373,7 @@ $thumb-size: 30px;
 
     input:not([type='file']):not([type='range']) {
       width: 100%;
-      height: 40px;
+      height: $input-text-height;
       padding: 0 12px;
       border: 1px solid #503a8f;
     }
@@ -394,9 +399,12 @@ $thumb-size: 30px;
   // Chat screen
 
   &.chat {
+    position: absolute;
+    bottom: 0;
     display: flex;
     align-items: stretch;
     width: 100%;
+    height: $input-text-height;
     max-width: inherit;
 
     label {
@@ -497,14 +505,12 @@ $profile-image-size: 200px;
 
 // App
 #app, .wrapper {
-  display: flex;
-  flex-direction: column;
   height: 100%;
 }
 
-.container {
+.wrapper {
   display: flex;
-  height: 100%;
+  flex-direction: column;
 }
 
 .page-container {
@@ -512,14 +518,23 @@ $profile-image-size: 200px;
   padding: 20px;
 }
 
-.main-header {
+.container {
   display: flex;
-  align-items: center;
+  flex-grow: 1;
+}
+
+.main-header {
   width: 100%;
-  height: 70px;
-  padding: 0 20px;
   background-color: #35275d;
   color: #fff;
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    height: 70px;
+    padding: 0 20px;
+  }
 
   nav {
     a {
@@ -556,27 +571,32 @@ $profile-image-size: 200px;
 }
 
 .chat-screen {
+  position: relative;
   display: flex;
+  flex-direction: column;
+  flex: 1;
   width: 100%;
 
-  .chat-message-screen {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-
     .messages {
+      position: absolute;
+      top: 0;
+      bottom: $input-text-height;
+      width: 100%;
       display: flex;
+      flex: 1;
       flex-direction: column;
-      height: 100%;
       overflow: auto;
       padding: 20px;
       margin: 0;
+      word-wrap: break-word;
     
       li {
-        display: flex;
         list-style: none;
         margin: 0 0 10px 0;
+
+        .message-content {
+          display: flex;
+        }
     
         .info {
           color: rgb(58, 143, 122);
@@ -598,20 +618,18 @@ $profile-image-size: 200px;
           margin-right: auto;
         }
       }
-    }
   }
 }
 
 .users-list-wrapper {
-  min-width: 200px;
-  max-width: 250px;
-  height: 100%;
+  display: flex;
   padding: 20px;
   background-color: #503a8f;
   color: #fff;
   word-break: break-all;
 
   .user-list {
+    width: 250px;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -666,11 +684,15 @@ $profile-image-size: 200px;
   .users-list-wrapper {
     position: fixed;
     width: 100%;
-    max-width: 100%;
+    height: 100%;
     z-index: 10;
     transform: translate3d(-100%, 0, 0);
 
     transition: transform 0.3s ease-out;
+
+    .user-list {
+      width: 100%;
+    }
 
     &.open {
       transform: translate3d(0, 0, 0);
