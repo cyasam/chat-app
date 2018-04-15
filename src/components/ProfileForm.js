@@ -154,20 +154,20 @@ class ProfileForm extends Component {
     const { data } = this.props;
 
     return (
-      <span>
+      <div className={`email-active-box ${data.activated ? 'active' : 'not-active'}`}>
         { data.activated ?
           (
             <Fragment>
-              <MdDone />Activated
+              <div className="icon "><MdDone /></div>Activated
             </Fragment>
           ) :
           (
             <Fragment>
-              <MdWarning />Not activated
+              <div className="icon"><MdWarning /></div>Not activated
             </Fragment>
           )
         }
-      </span>
+      </div>
     );
   }
 

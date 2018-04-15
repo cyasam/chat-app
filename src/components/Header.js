@@ -2,11 +2,23 @@ import React, { Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { MdMenu } from 'react-icons/lib/md';
 import logout from '../actions/logout-action';
+import clickMenu from '../actions/menu-click-action';
 
 const Header = props => (
   <header className="main-header">
     <nav>
+      { props.auth.status &&
+        <button
+          className="menu-btn"
+          onClick={() => {
+            props.clickMenu();
+          }}
+        >
+          <MdMenu />
+        </button>
+      }
       <Link to="/">Home</Link>
       { props.auth.status ? (
         <Fragment>
@@ -20,7 +32,7 @@ const Header = props => (
       )}
     </nav>
     { props.auth.status && (
-      <button onClick={props.logout}>
+      <button className="logout-btn" onClick={props.logout}>
         Logout
       </button>
     )}
@@ -33,7 +45,8 @@ const mapStateToProps = state => ({
 
 Header.propTypes = {
   auth: PropTypes.object.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  clickMenu: PropTypes.func.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { logout })(Header));
+export default withRouter(connect(mapStateToProps, { logout, clickMenu })(Header));

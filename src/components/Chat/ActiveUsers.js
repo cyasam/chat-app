@@ -20,10 +20,10 @@ class ActiveUsers extends Component {
   }
 
   render() {
-    const { isFetching, users } = this.props;
+    const { isFetching, users, menuOpen } = this.props;
 
     return (
-      <div className="users-list-wrapper">
+      <div className={`users-list-wrapper${menuOpen ? ' open': ''}`}>
         { isFetching ? (
           <p>Loading...</p>
         ) : (
@@ -38,12 +38,14 @@ class ActiveUsers extends Component {
 
 const mapStateToProps = state => ({
   isFetching: state.usersList.isFetching,
-  users: state.usersList.users
+  users: state.usersList.users,
+  menuOpen: state.menuOpen.status
 });
 
 ActiveUsers.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   users: PropTypes.array.isRequired,
+  menuOpen: PropTypes.bool.isRequired,
   activeUsers: PropTypes.object.isRequired,
   getUsersList: PropTypes.func.isRequired
 };

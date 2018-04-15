@@ -7,6 +7,7 @@ import profileFormReducer from './profile-form-reducer';
 import getUsersListReducer from './get-users-list-reducer';
 import chatSocketReducer from './chat-socket-reducer';
 import checkNicknameReducer from './check-nickname-reducer';
+import menuClickReducer from './menu-click-reducer';
 
 export default combineReducers({
   authentication: authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
   profileForm: profileFormReducer,
   usersList: getUsersListReducer,
   chatSocket: chatSocketReducer,
-  checkNickname: checkNicknameReducer
+  checkNickname: checkNicknameReducer,
+  menuOpen: menuClickReducer
 });
