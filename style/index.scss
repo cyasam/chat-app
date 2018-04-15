@@ -397,6 +397,7 @@ $thumb-size: 30px;
     display: flex;
     align-items: stretch;
     width: 100%;
+    max-width: inherit;
 
     label {
       width: 100%;
