@@ -55,13 +55,6 @@ export default (email, password) => (dispatch) => {
       });
     }
   }).catch((error) => {
-    let errorMessage;
-    if (error.response.status === 401) {
-      errorMessage = 'Wrong email and/or password';
-    } else {
-      errorMessage = error.response.data.message;
-    }
-
     dispatch({
       type: AUTH_ERROR,
       payload: {
@@ -69,7 +62,7 @@ export default (email, password) => (dispatch) => {
         auth: {
           status: false
         },
-        message: errorMessage
+        message: error.message
       }
     });
   });

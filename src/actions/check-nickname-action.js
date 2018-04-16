@@ -40,7 +40,7 @@ export default nickname => (dispatch) => {
       payload: {
         isFetching: false,
         status: false,
-        message: error.response.data.message
+        message: error.message
       }
     });
   });

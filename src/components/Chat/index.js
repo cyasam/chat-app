@@ -18,7 +18,10 @@ class Chat extends Component {
 
   componentWillMount() {
     this.socket = this.props.chatSocket;
-    this.startSocket();
+
+    if (Object.keys(this.socket).length) {
+      this.startSocket();
+    }
   }
 
   onSubmit(text) {
@@ -60,8 +63,6 @@ class Chat extends Component {
   }
 
   startSocket() {
-    this.socket.emit('add user', { email: this.props.email, nickname: this.props.nickname });
-
     this.socket.on('new message', (message) => {
       const { messageList } = this.state;
       const newMessage = messageList.find(item =>

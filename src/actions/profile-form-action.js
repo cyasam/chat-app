@@ -1,6 +1,4 @@
-import config from '../config';
 import requests from '../helpers/requests';
-import { AUTH_ERROR } from './auth-action';
 
 export const PROFILE_FORM_LOADING = 'PROFILE_FORM_LOADING';
 export const PROFILE_FORM_SUCCESS = 'PROFILE_FORM_SUCCESS';
@@ -40,27 +38,8 @@ export default formData => (dispatch) => {
       });
     }
   }).catch((error) => {
-    if (error.response.status === 401) {
-      localStorage.removeItem(config.TOKEN_KEY_NAME);
-      dispatch({
-        type: AUTH_ERROR,
-        payload: {
-          isFetching: false,
-          auth: {
-            status: false
-          },
-          message: 'No Authorization.'
-        }
-      });
-    } else if (error.response) {
-      dispatch({
-        type: PROFILE_FORM_ERROR,
-        payload: {
-          isFetching: false,
-          status: false,
-          message: error.response.data.message
-        }
-      });
+    if (error.authDispatch) {
+      dispatch(error.authDispatch);
     }
 
     dispatch({
@@ -68,7 +47,7 @@ export default formData => (dispatch) => {
       payload: {
         isFetching: false,
         status: false,
-        message: 'Internal Server Error'
+        message: error.message
       }
     });
   });

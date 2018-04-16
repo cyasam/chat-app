@@ -21,7 +21,7 @@ const AppContainer = props => (
       { props.auth.status && <ActivateAccount /> }
       <div className="container">
         { Object.keys(props.auth).length > 0 ?
-          ( 
+          (
             <Fragment>
               { props.auth.status && (
                 <Fragment>
@@ -30,11 +30,11 @@ const AppContainer = props => (
               ) }
             </Fragment>
           ) : (
-            <Loading className="app" /> 
+            <Loading className="app" />
           )
         }
         <Switch>
-          <Route path="/" exact component={Home} />
+          <Route path="/" exact component={Protected(Home)} />
           <Route path="/register" component={RegisterIndex} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Protected(Profile)} />

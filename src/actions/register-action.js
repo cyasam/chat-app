@@ -42,7 +42,7 @@ export default fetchData => (dispatch) => {
       payload: {
         isFetching: false,
         activated: false,
-        message: error.response.data.message
+        message: error.message
       }
     });
   });

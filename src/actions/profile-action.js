@@ -1,6 +1,4 @@
-import config from '../config';
 import requests from '../helpers/requests';
-import { AUTH_ERROR } from './auth-action';
 
 export const PROFILE_LOADING = 'PROFILE_LOADING';
 export const PROFILE_SUCCESS = 'PROFILE_SUCCESS';
@@ -35,25 +33,15 @@ export default () => (dispatch) => {
       });
     }
   }).catch((error) => {
-    if (error.status === 401) {
-      localStorage.removeItem(config.TOKEN_KEY_NAME);
-      dispatch({
-        type: AUTH_ERROR,
-        payload: {
-          isFetching: false,
-          auth: {
-            status: false
-          },
-          message: ''
-        }
-      });
+    if (error.authDispatch) {
+      dispatch(error.authDispatch);
     }
 
     dispatch({
       type: PROFILE_ERROR,
       payload: {
         isFetching: false,
-        message: error.response.data.message
+        message: error.message
       }
     });
   });

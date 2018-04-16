@@ -6,7 +6,7 @@ import getUsersList from '../../actions/get-users-list-action';
 class ActiveUsers extends Component {
   constructor() {
     super();
-    
+
     this.state = {
       activeUsers: {}
     };
@@ -16,9 +16,12 @@ class ActiveUsers extends Component {
     this.props.getUsersList();
 
     this.socket = this.props.chatSocket;
-    this.socket.on('active users', (activeUsers) => {
-      this.setState({ activeUsers });
-    });
+
+    if (Object.keys(this.socket).length) {
+      this.socket.on('active users', (activeUsers) => {
+        this.setState({ activeUsers });
+      });
+    }
   }
 
   renderUsers(user) {
@@ -37,7 +40,7 @@ class ActiveUsers extends Component {
     const { isFetching, users, menuOpen } = this.props;
 
     return (
-      <div className={`users-list-wrapper${menuOpen ? ' open': ''}`}>
+      <div className={`users-list-wrapper${menuOpen ? ' open' : ''}`}>
         { isFetching ? (
           <p>Loading...</p>
         ) : (
