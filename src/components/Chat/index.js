@@ -131,8 +131,8 @@ class Chat extends Component {
 
 const mapStateToProps = state => ({
   nickname: state.authentication.auth.nickname,
-  email: state.authentication.auth.email,
-  profileImage: state.authentication.auth.profileImage,
+  email: state.authentication.auth.email || '',
+  profileImage: state.authentication.auth.profileImage || '',
   chatSocket: state.chatSocket,
   users: state.usersList.users
 });
