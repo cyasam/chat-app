@@ -2,17 +2,46 @@ import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import Loadable from 'react-loadable';
 
 // Components
 import Loading from './components/Loading';
 import Header from './components/Header';
 import Protected from './components/Protected';
-import ActivateAccount from './components/ActivateAccount';
-import Home from './pages/Home';
-import RegisterIndex from './pages/register';
-import Login from './pages/Login';
-import Profile from './pages/Profile';
-import ActiveUsers from './components/Chat/ActiveUsers';
+
+const Home = Loadable({
+  loader: () => import('./pages/Home'),
+  loading: Loading
+});
+
+const RegisterIndex = Loadable({
+  loader: () => import('./pages/register'),
+  loading: Loading
+});
+
+const Login = Loadable({
+  loader: () => import('./pages/Login'),
+  loading: Loading
+});
+
+const Profile = Loadable({
+  loader: () => import('./pages/Profile'),
+  loading: Loading
+});
+
+const ActiveUsers = Loadable({
+  loader: () => import('./components/Chat/ActiveUsers'),
+  loading() {
+    return null;
+  }
+});
+
+const ActivateAccount = Loadable({
+  loader: () => import('./components/ActivateAccount'),
+  loading() {
+    return null;
+  }
+});
 
 const AppContainer = props => (
   <Router>
@@ -20,19 +49,7 @@ const AppContainer = props => (
       <Header />
       { props.auth.status && <ActivateAccount /> }
       <div className="container">
-        { Object.keys(props.auth).length > 0 ?
-          (
-            <Fragment>
-              { props.auth.status && (
-                <Fragment>
-                  <ActiveUsers />
-                </Fragment>
-              ) }
-            </Fragment>
-          ) : (
-            <Loading className="app" />
-          )
-        }
+        { props.auth.status && <ActiveUsers /> }
         <Switch>
           <Route path="/" exact component={Protected(Home)} />
           <Route path="/register" component={RegisterIndex} />

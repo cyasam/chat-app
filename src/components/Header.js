@@ -9,6 +9,7 @@ import clickMenu from '../actions/menu-click-action';
 const Header = props => (
   <header className="main-header">
     <div className="header-inner">
+      <h1 className="logo"><Link to="/">ChatApp</Link></h1>
       <nav>
         { props.auth.status &&
           <button
@@ -20,7 +21,6 @@ const Header = props => (
             <MdMenu />
           </button>
         }
-        <Link to="/">Home</Link>
         { props.auth.status ? (
           <Fragment>
             <Link to="/profile">Profile</Link>

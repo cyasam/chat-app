@@ -12,8 +12,8 @@ class ActiveUsers extends Component {
     };
   }
 
-  componentWillMount() {
-    this.props.getUsersList();
+  async componentWillMount() {
+    await this.props.getUsersList();
 
     this.socket = this.props.chatSocket;
 
@@ -27,33 +27,37 @@ class ActiveUsers extends Component {
   renderUsers(user) {
     const { activeUsers } = this.state;
     const activeUser = Object.keys(activeUsers).find(id => activeUsers[id].email === user.email);
+    const nicknameClass = `status ${activeUser ? 'online' : 'offline'}`;
 
     return (
       <li key={user.id}>
         { user.profileImage ? <img className="thumb-img" src={user.profileImage} alt={user.nickname} /> : <div className="anonymous-thumb" /> }
-        { user.nickname } <span className={`status ${activeUser ? 'online' : 'offline'}`} />
+        { user.nickname } <span className={nicknameClass} />
       </li>
     );
   }
 
   render() {
-    const { isFetching, users, menuOpen } = this.props;
+    const { auth, isFetching, users, menuOpen } = this.props;
+
+    if (!auth.status) {
+      return null
+    }      
 
     return (
       <div className={`users-list-wrapper${menuOpen ? ' open' : ''}`}>
-        { isFetching ? (
-          <p>Loading...</p>
-        ) : (
-          <ul className="user-list">
-            { users.map(user => this.renderUsers(user)) }
-          </ul>
-        )}
+        <ul className="user-list">
+          { isFetching ? (
+            <li>Loading...</li>
+          ) : users.map(user => this.renderUsers(user)) }
+        </ul>
       </div>
     );
   }
 }
 
 const mapStateToProps = state => ({
+  auth: state.authentication.auth,
   isFetching: state.usersList.isFetching,
   users: state.usersList.users,
   menuOpen: state.menuOpen.status,

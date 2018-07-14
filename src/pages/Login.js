@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validator from 'validator';
 import authLoader from '../actions/auth-action';
-import Loading from '../components/Loading';
 
 class Login extends Component {
   constructor() {
@@ -83,8 +82,8 @@ class Login extends Component {
     } = this.state;
 
     return (
-      <div className="page-container">
-        { isFetching && <Loading className="app" /> }
+      <div className="page-container login-form">
+        <h2>Connect to Our Chat.</h2>
         { message && <div className={auth.status ? 'success' : 'error'}>{message}</div> }
         <form className="form-wrapper" onSubmit={this.onSubmit}>
           <label htmlFor="email">
@@ -95,7 +94,7 @@ class Login extends Component {
             <span>Password</span>
             <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
           </label>
-          <button type="submit" disabled={isFetching}>Login</button>
+          <button type="submit" disabled={isFetching}>{ isFetching ? "Loading..." : "Login"}</button>
         </form>
       </div>
     );

@@ -152,13 +152,14 @@ class ProfileForm extends Component {
 
   emailActiveStatus() {
     const { data } = this.props;
+    const emailBoxClassName = `email-active-box ${ data.activated ? "active" : "not-active" }`;
 
     return (
-      <div className={`email-active-box ${data.activated ? 'active' : 'not-active'}`}>
+      <div className={emailBoxClassName}>
         { data.activated ?
           (
             <Fragment>
-              <div className="icon "><MdDone /></div>Activated
+              <div className="icon"><MdDone /></div>Activated
             </Fragment>
           ) :
           (
@@ -196,11 +197,12 @@ class ProfileForm extends Component {
       password,
       confirmPassword
     } = this.state;
+    
+    if (isFetching) { return <Loading /> }
 
     return (
       <Fragment>
         { this.renderMessage() }
-        { isFetching && <Loading /> }
         <div className="profile-form-wrapper">
           <div className="profile-image-container">
             <ProfileImage

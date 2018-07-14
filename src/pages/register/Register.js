@@ -144,28 +144,31 @@ class Register extends Component {
 
     return (
       <Fragment>
-        { isFetching && <Loading className="app" /> }
-        { message && <div className={status ? 'success' : 'error'}>{message}</div> }
-        <form className="form-wrapper" onSubmit={this.onSubmit}>
-          <NicknameInput value={nickname} minLength={minStringLength} onChange={this.onChange} />
-          <label htmlFor="email">
-            <span>Email</span>
-            <input id="email" name="email" type="email" value={email} onChange={this.onChange} />
-          </label>
-          <label htmlFor="name">
-            <span>Name</span>
-            <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
-          </label>
-          <label htmlFor="password">
-            <span>Password</span>
-            <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
-          </label>
-          <label htmlFor="confirm-password">
-            <span>Confirm password</span>
-            <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
-          </label>
-          <button type="submit" disabled={isFetching}>SignUp</button>
-        </form>
+        <div className="register-form">
+          <h2>Join Us Now</h2>
+          { isFetching && <Loading className="app" /> }
+          { message && <div className={status ? 'success' : 'error'}>{message}</div> }
+          <form className="form-wrapper" onSubmit={this.onSubmit}>
+            <NicknameInput value={nickname} minLength={minStringLength} onChange={this.onChange} />
+            <label htmlFor="email">
+              <span>Email</span>
+              <input id="email" name="email" type="email" value={email} onChange={this.onChange} />
+            </label>
+            <label htmlFor="name">
+              <span>Name</span>
+              <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
+            </label>
+            <label htmlFor="password">
+              <span>Password</span>
+              <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
+            </label>
+            <label htmlFor="confirm-password">
+              <span>Confirm password</span>
+              <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
+            </label>
+            <button type="submit" disabled={isFetching}>SignUp</button>
+          </form>
+        </div>
       </Fragment>
     );
   }

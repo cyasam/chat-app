@@ -2,25 +2,31 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Loadable from 'react-loadable';
 import profileLoader from '../actions/profile-action';
-import ProfileForm from '../components/ProfileForm';
 import Loading from '../components/Loading';
 
+const ProfileForm = Loadable({
+  loader: () => import('../components/ProfileForm'),
+  loading() {
+    return null;
+  }
+});
+
 class Profile extends Component {
-  componentWillMount() {
-    this.props.profileLoader();
+  async componentWillMount() {
+    await this.props.profileLoader();
   }
 
   render() {
     const {
-      isFetching,
       message,
       data
     } = this.props;
+
     return (
       <div className="page-container">
         { message && <div className="error">{message}</div> }
-        { isFetching && <Loading className="app" /> }
         <ProfileForm data={data} />
       </div>
     );
