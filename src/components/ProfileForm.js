@@ -6,7 +6,7 @@ import validator from 'validator';
 import { MdWarning, MdDone } from 'react-icons/lib/md';
 import helpers from '../helpers';
 import profileFormLoader from '../actions/profile-form-action';
-import Loading from '../components/Loading';
+import Loading from './Loading';
 import ProfileImage from './ProfileImage';
 
 class ProfileForm extends Component {
@@ -34,17 +34,21 @@ class ProfileForm extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!this.state.formStatus && this.state.firstLoad) {
+    const { formStatus, firstLoad } = this.state;
+
+    if (!formStatus && firstLoad) {
+      const { data } = nextProps;
       this.setState({
-        ...nextProps.data,
+        ...data,
         profileImageOld: nextProps.data.profileImage,
         firstLoad: false,
         message: ''
       });
     } else {
       if (nextProps.formStatus) {
+        const { data } = nextProps;
         this.setState({
-          ...nextProps.data,
+          ...data,
           profileImageOld: nextProps.data.profileImage
         });
       }
@@ -69,12 +73,7 @@ class ProfileForm extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const {
-      nickname,
-      name,
-      password,
-      profileImage
-    } = this.state;
+    const { nickname, name, password, profileImage } = this.state;
 
     const formData = helpers.formDataValTrim({
       nickname,
@@ -98,20 +97,14 @@ class ProfileForm extends Component {
           data.append('password', formData.password);
         }
 
-        this.props.profileFormLoader(data);
+        const { profileFormLoader: profileFormLoad } = this.props;
+        profileFormLoad(data);
       }
     }
   }
 
   onValidate() {
-    const {
-      minStringLength,
-      minPasswordLength,
-      nickname,
-      name,
-      password,
-      confirmPassword
-    } = this.state;
+    const { minStringLength, minPasswordLength, nickname, name, password, confirmPassword } = this.state;
 
     if (!validator.isLength(nickname, { min: minStringLength })) {
       this.setState({ message: 'Provide your nickname.' });
@@ -137,7 +130,7 @@ class ProfileForm extends Component {
   }
 
   resetImage(name) {
-    this.setState({ [name]: this.state[`${name}Old`] });
+    this.setState(prevState => ({ [name]: prevState[`${name}Old`] }));
   }
 
   resetForm(props) {
@@ -152,61 +145,53 @@ class ProfileForm extends Component {
 
   emailActiveStatus() {
     const { data } = this.props;
-    const emailBoxClassName = `email-active-box ${ data.activated ? "active" : "not-active" }`;
+    const emailBoxClassName = `email-active-box ${data.activated ? 'active' : 'not-active'}`;
 
     return (
       <div className={emailBoxClassName}>
-        { data.activated ?
-          (
-            <Fragment>
-              <div className="icon"><MdDone /></div>Activated
-            </Fragment>
-          ) :
-          (
-            <Fragment>
-              <div className="icon"><MdWarning /></div>Not activated
-            </Fragment>
-          )
-        }
+        {data.activated ? (
+          <Fragment>
+            <div className="icon">
+              <MdDone />
+            </div>
+            Activated
+          </Fragment>
+        ) : (
+          <Fragment>
+            <div className="icon">
+              <MdWarning />
+            </div>
+            Not activated
+          </Fragment>
+        )}
       </div>
     );
   }
 
   renderMessage() {
-    const {
-      message,
-      formStatus,
-    } = this.state;
+    const { message, formStatus } = this.state;
 
-    return (
-      <Fragment>
-        { message && <div className={formStatus ? 'success' : 'error'}>{message}</div> }
-      </Fragment>
-    );
+    return <Fragment>{message && <div className={formStatus ? 'success' : 'error'}>{message}</div>}</Fragment>;
   }
 
   render() {
-    const {
-      isFetching,
-      data
-    } = this.props;
+    const { isFetching, data } = this.props;
 
-    const {
-      nickname,
-      name,
-      password,
-      confirmPassword
-    } = this.state;
-    
-    if (isFetching) { return <Loading /> }
+    const { nickname, name, password, confirmPassword } = this.state;
+
+    if (isFetching) {
+      return <Loading />;
+    }
+
+    const { profileImageOld } = this.state;
 
     return (
       <Fragment>
-        { this.renderMessage() }
+        {this.renderMessage()}
         <div className="profile-form-wrapper">
           <div className="profile-image-container">
             <ProfileImage
-              oldImage={this.state.profileImageOld}
+              oldImage={profileImageOld}
               onSubmit={this.onSubmit}
               onChange={this.onChangeProfileImage}
               resetImage={this.resetImage}
@@ -214,14 +199,17 @@ class ProfileForm extends Component {
           </div>
           <form className="form-wrapper" onSubmit={this.onSubmit}>
             <div className="form-inner">
-              <label htmlFor="email">
+              <div className="label">
                 <span>Email</span>
-                <div className="value">{ data.email } { this.emailActiveStatus() }</div>
-              </label>
-              <label htmlFor="nickname">
+                <div className="value">
+                  <span>{data.email}</span>
+                  <span>{this.emailActiveStatus()}</span>
+                </div>
+              </div>
+              <div className="label">
                 <span>Nickname</span>
                 <div className="value">{nickname}</div>
-              </label>
+              </div>
               <label htmlFor="name">
                 <span>Name</span>
                 <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
@@ -232,9 +220,17 @@ class ProfileForm extends Component {
               </label>
               <label htmlFor="confirm-password">
                 <span>Confirm password</span>
-                <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
+                <input
+                  id="confirm-password"
+                  name="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={this.onChange}
+                />
               </label>
-              <button type="submit" disabled={isFetching}>Save Profile</button>
+              <button type="submit" disabled={isFetching}>
+                Save Profile
+              </button>
             </div>
           </form>
         </div>
@@ -257,7 +253,9 @@ ProfileForm.propTypes = {
   profileFormLoader: PropTypes.func.isRequired
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  { profileFormLoader }
-)(ProfileForm));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { profileFormLoader }
+  )(ProfileForm)
+);

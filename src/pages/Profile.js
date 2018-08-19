@@ -19,14 +19,11 @@ class Profile extends Component {
   }
 
   render() {
-    const {
-      message,
-      data
-    } = this.props;
+    const { message, data } = this.props;
 
     return (
       <div className="page-container">
-        { message && <div className="error">{message}</div> }
+        {message && <div className="error">{message}</div>}
         <ProfileForm data={data} />
       </div>
     );
@@ -46,4 +43,9 @@ Profile.propTypes = {
   profileLoader: PropTypes.func.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { profileLoader })(Profile));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { profileLoader }
+  )(Profile)
+);

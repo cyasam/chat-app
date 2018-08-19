@@ -1,6 +1,6 @@
-const formDataValTrim = (formData) => {
+const formDataValTrim = formData => {
   const data = { ...formData };
-  Object.keys(data).forEach((prop) => {
+  Object.keys(data).forEach(prop => {
     data[prop] = data[prop].trim();
   });
 

@@ -27,8 +27,9 @@ class Register extends Component {
   }
 
   componentDidMount() {
-    if (this.props.auth.status) {
-      this.props.history.push('/');
+    const { auth, history } = this.props;
+    if (auth.status) {
+      history.push('/');
     }
   }
 
@@ -36,8 +37,9 @@ class Register extends Component {
     this.setState({ message: nextProps.serverMessage });
 
     if (nextProps.status) {
-      this.props.history.push({
-        pathname: `${this.props.match.url}/complete`,
+      const { history, match } = this.props;
+      history.push({
+        pathname: `${match.url}/complete`,
         state: { activated: nextProps.status, message: nextProps.serverMessage }
       });
     }
@@ -55,22 +57,15 @@ class Register extends Component {
   }
 
   onValidate() {
-    const {
-      minStringLength,
-      minPasswordLength,
-      name,
-      nickname,
-      email,
-      password,
-      confirmPassword
-    } = this.state;
+    const { minStringLength, minPasswordLength, name, nickname, email, password, confirmPassword } = this.state;
+    const { nicknameStatus } = this.props;
 
     if (!validator.isLength(nickname, { min: minStringLength })) {
       this.setState({ message: 'Provide your nickname.' });
       return false;
     }
 
-    if (!this.props.nicknameStatus) {
+    if (!nicknameStatus) {
       this.setState({ message: 'Provide different nickname.' });
       return false;
     }
@@ -109,12 +104,7 @@ class Register extends Component {
   }
 
   createUser() {
-    const {
-      name,
-      nickname,
-      email,
-      password
-    } = this.state;
+    const { name, nickname, email, password } = this.state;
 
     const fetchData = {
       name,
@@ -123,31 +113,21 @@ class Register extends Component {
       password
     };
 
-    this.props.registerFormLoader(fetchData);
+    const { registerFormLoader: registerFormLoad } = this.props;
+    registerFormLoad(fetchData);
   }
 
   render() {
-    const {
-      isFetching,
-      status
-    } = this.props;
+    const { isFetching, status } = this.props;
 
-    const {
-      minStringLength,
-      message,
-      name,
-      nickname,
-      email,
-      password,
-      confirmPassword
-    } = this.state;
+    const { minStringLength, message, name, nickname, email, password, confirmPassword } = this.state;
 
     return (
       <Fragment>
         <div className="register-form">
           <h2>Join Us Now</h2>
-          { isFetching && <Loading className="app" /> }
-          { message && <div className={status ? 'success' : 'error'}>{message}</div> }
+          {isFetching && <Loading className="app" />}
+          {message && <div className={status ? 'success' : 'error'}>{message}</div>}
           <form className="form-wrapper" onSubmit={this.onSubmit}>
             <NicknameInput value={nickname} minLength={minStringLength} onChange={this.onChange} />
             <label htmlFor="email">
@@ -164,9 +144,17 @@ class Register extends Component {
             </label>
             <label htmlFor="confirm-password">
               <span>Confirm password</span>
-              <input id="confirm-password" name="confirmPassword" type="password" value={confirmPassword} onChange={this.onChange} />
+              <input
+                id="confirm-password"
+                name="confirmPassword"
+                type="password"
+                value={confirmPassword}
+                onChange={this.onChange}
+              />
             </label>
-            <button type="submit" disabled={isFetching}>SignUp</button>
+            <button type="submit" disabled={isFetching}>
+              SignUp
+            </button>
           </form>
         </div>
       </Fragment>
@@ -193,4 +181,9 @@ Register.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { registerFormLoader })(Register));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { registerFormLoader }
+  )(Register)
+);

@@ -4,16 +4,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import config from '../config';
 
-export default (ComposedComponent) => {
+export default ComposedComponent => {
   class Protected extends Component {
     componentWillMount() {
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
-      const {
-        auth,
-        history,
-        chatSocket,
-        email
-      } = this.props;
+      const { auth, history, chatSocket, email } = this.props;
 
       if (!auth.status && !token) {
         history.push('/login');
@@ -27,12 +22,7 @@ export default (ComposedComponent) => {
     }
 
     componentWillReceiveProps(nextProps) {
-      const {
-        auth,
-        history,
-        chatSocket,
-        email
-      } = nextProps;
+      const { auth, history, chatSocket, email } = nextProps;
 
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
 
@@ -48,7 +38,8 @@ export default (ComposedComponent) => {
     }
 
     startSocket() {
-      this.socket.emit('add user', { email: this.props.email, nickname: this.props.nickname });
+      const { email, nickname } = this.props;
+      this.socket.emit('add user', { email, nickname });
     }
 
     render() {

@@ -27,8 +27,9 @@ class ProfileImage extends Component {
   }
 
   onSubmit(event) {
+    const { onSubmit } = this.props;
     event.preventDefault();
-    this.props.onSubmit(event);
+    onSubmit(event);
   }
 
   croppingInit(image) {
@@ -56,7 +57,7 @@ class ProfileImage extends Component {
     });
 
     this.profileImageBox.addEventListener('update', () => {
-      this.croppie.result({ type: 'blob', format: 'png' }).then((result) => {
+      this.croppie.result({ type: 'blob', format: 'png' }).then(result => {
         this.props.onChange(this.state.name, result);
       });
     });
@@ -85,27 +86,39 @@ class ProfileImage extends Component {
   }
 
   changeImageNameStr() {
-    return this.props.oldImage ?
-      this.props.oldImage.replace('-thumb', '') : this.props.oldImage;
+    return this.props.oldImage ? this.props.oldImage.replace('-thumb', '') : this.props.oldImage;
   }
 
   render() {
     return (
       <form className="profile-image-box" onSubmit={this.onSubmit} encType="multipart/form-data">
-        { this.state.previewImage ? (
+        {this.state.previewImage ? (
           <div className="preview-box-container">
-            <div className="preview-box" ref={(profileImageBox) => { this.profileImageBox = profileImageBox; }} />
+            <div
+              className="preview-box"
+              ref={profileImageBox => {
+                this.profileImageBox = profileImageBox;
+              }}
+            />
             <button className="button">Save</button>
-            <div className="button" role="link" onClick={this.resetImage} onKeyDown={this.resetImage} tabIndex={0}>Cancel</div>
+            <div className="button" role="link" onClick={this.resetImage} onKeyDown={this.resetImage} tabIndex={0}>
+              Cancel
+            </div>
           </div>
         ) : (
           <label htmlFor="profile-image-input">
-            { this.props.oldImage ? (
+            {this.props.oldImage ? (
               <img src={this.changeImageNameStr()} className="profile-placeholder" alt="" />
             ) : (
               <div className="profile-placeholder" />
             )}
-            <input id="profile-image-input" name="profileImage" type="file" accept=".png, .jpg, .jpeg" onChange={this.onChangeProfileImage} />
+            <input
+              id="profile-image-input"
+              name="profileImage"
+              type="file"
+              accept=".png, .jpg, .jpeg"
+              onChange={this.onChangeProfileImage}
+            />
           </label>
         )}
       </form>

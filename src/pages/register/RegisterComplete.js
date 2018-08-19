@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import register from '../../actions/register-action';
+import registerAction from '../../actions/register-action';
 import Loading from '../../components/Loading';
 
 class RegisterComplete extends Component {
@@ -16,17 +16,21 @@ class RegisterComplete extends Component {
   }
 
   componentWillMount() {
-    const { search, state } = this.props.location;
+    const {
+      history,
+      location: { search, state },
+      registerAction: register
+    } = this.props;
     const params = new URLSearchParams(search);
     const key = params.get('key');
 
     if (!state && !key) {
-      this.props.history.push('/');
+      history.push('/');
     } else if (key) {
       const fetchData = { key };
-      this.props.register(fetchData);
+      register(fetchData);
     } else if (state) {
-      const { activated, message } = this.props.location.state;
+      const { activated, message } = state;
       this.setState({ activated, message });
     }
   }
@@ -37,11 +41,14 @@ class RegisterComplete extends Component {
   }
 
   render() {
+    const { activated, message } = this.state;
+    const { isFetching } = this.props;
+
     return (
       <Fragment>
         <div style={{ position: 'relative', minHeight: 50 }}>
-          { this.props.isFetching && <Loading /> }
-          <div className={this.state.activated ? 'success' : 'error'}>{this.state.message}</div>
+          {isFetching && <Loading />}
+          <div className={activated ? 'success' : 'error'}>{message}</div>
         </div>
       </Fragment>
     );
@@ -58,9 +65,14 @@ RegisterComplete.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   activated: PropTypes.bool.isRequired,
   message: PropTypes.string.isRequired,
-  register: PropTypes.func.isRequired,
+  registerAction: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { register })(RegisterComplete));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { registerAction }
+  )(RegisterComplete)
+);

@@ -9,7 +9,7 @@ const instance = axios.create({
 
 instance.interceptors.response.use(
   response => response,
-  (err) => {
+  err => {
     const error = err;
 
     if (error.response) {

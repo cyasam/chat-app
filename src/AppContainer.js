@@ -47,9 +47,9 @@ const AppContainer = props => (
   <Router>
     <div className="wrapper">
       <Header />
-      { props.auth.status && <ActivateAccount /> }
+      {props.auth.status && <ActivateAccount />}
       <div className="container">
-        { props.auth.status && <ActiveUsers /> }
+        {props.auth.status && <ActiveUsers />}
         <Switch>
           <Route path="/" exact component={Protected(Home)} />
           <Route path="/register" component={RegisterIndex} />

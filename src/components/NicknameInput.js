@@ -15,29 +15,39 @@ class NicknameInput extends Component {
   componentDidMount() {}
 
   onChange(e) {
-    this.props.onChange(e);
+    const { onChange } = this.props;
+
+    onChange(e);
     this.checkNicknameDebounced();
   }
 
   checkNickname() {
-    if (this.props.value.length >= this.props.minLength) {
-      this.props.checkNickname(this.props.value);
+    const { checkNickname: checkNick, value, minLength } = this.props;
+
+    if (value.length >= minLength) {
+      checkNick(value);
     }
   }
 
   renderMessage() {
-    if (this.props.isFetching) {
+    const { isFetching, value, minLength, message } = this.props;
+
+    if (isFetching) {
       return 'Loading';
     }
 
-    return (this.props.value.length >= this.props.minLength) ? <span className="nick-result">{ this.props.message }</span> : null;
+    return value.length >= minLength && <span className="nick-result">{message}</span>;
   }
 
   render() {
+    const { value } = this.props;
     return (
       <label htmlFor="nickname">
-        <span>Nickname { this.renderMessage() }</span>
-        <input id="nickname" name="nickname" type="text" value={this.props.value} onChange={this.onChange} />
+        <span>
+          Nickname
+          <span>{this.renderMessage()}</span>
+        </span>
+        <input id="nickname" name="nickname" type="text" value={value} onChange={this.onChange} />
       </label>
     );
   }
@@ -61,4 +71,7 @@ NicknameInput.propTypes = {
   checkNickname: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, { checkNickname })(NicknameInput);
+export default connect(
+  mapStateToProps,
+  { checkNickname }
+)(NicknameInput);

@@ -63,10 +63,9 @@ class Chat extends Component {
   }
 
   startSocket() {
-    this.socket.on('new message', (message) => {
+    this.socket.on('new message', message => {
       const { messageList } = this.state;
-      const newMessage = messageList.find(item =>
-        item.email === message.email && item.typing);
+      const newMessage = messageList.find(item => item.email === message.email && item.typing);
 
       if (newMessage) {
         const index = messageList.indexOf(newMessage);
@@ -87,10 +86,9 @@ class Chat extends Component {
       }
     });
 
-    this.socket.on('typing', (typingObj) => {
+    this.socket.on('typing', typingObj => {
       const data = { ...typingObj };
-      const message = this.state.messageList.find(item =>
-        item.email === typingObj.email && item.typing);
+      const message = this.state.messageList.find(item => item.email === typingObj.email && item.typing);
 
       if (!message && typingObj.email !== this.props.email) {
         data.id = this.state.messageList.length;
@@ -101,10 +99,9 @@ class Chat extends Component {
       }
     });
 
-    this.socket.on('stop typing', (typingObj) => {
+    this.socket.on('stop typing', typingObj => {
       const messageList = [...this.state.messageList];
-      const message = this.state.messageList.filter(item =>
-        item.email === typingObj.email && item.typing);
+      const message = this.state.messageList.filter(item => item.email === typingObj.email && item.typing);
 
       if (message.length && typingObj.email !== this.props.email) {
         const index = messageList.indexOf(message);

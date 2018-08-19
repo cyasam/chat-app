@@ -1,7 +1,7 @@
 import { PROFILE_FORM_SUCCESS } from '../actions/profile-form-action';
 import { PROFILE_SUCCESS } from '../actions/profile-action';
 
-export default store => next => (action) => {
+export default store => next => action => {
   if (action.type === PROFILE_FORM_SUCCESS) {
     store.dispatch({
       type: PROFILE_SUCCESS,

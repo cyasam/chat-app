@@ -8,10 +8,7 @@ import authChecker from './actions/auth-check-action';
 // Components
 import AppContainer from './AppContainer';
 
-const store = createStore(
-  rootReducer,
-  applyMiddleware(...customMiddlewares)
-);
+const store = createStore(rootReducer, applyMiddleware(...customMiddlewares));
 
 store.dispatch(authChecker());
 

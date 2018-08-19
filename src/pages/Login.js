@@ -20,8 +20,9 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    if (this.props.auth.status) {
-      this.props.history.push('/');
+    const { auth, history } = this.props;
+    if (auth.status) {
+      history.push('/');
     }
   }
 
@@ -29,7 +30,8 @@ class Login extends Component {
     this.setState({ message: nextProps.serverMessage });
 
     if (nextProps.auth.status) {
-      this.props.history.push('/');
+      const { history } = this.props;
+      history.push('/');
     }
   }
 
@@ -45,10 +47,7 @@ class Login extends Component {
   }
 
   onValidate() {
-    const {
-      email,
-      password
-    } = this.state;
+    const { email, password } = this.state;
 
     if (validator.isEmpty(email) || validator.isEmpty(password)) {
       this.setState({ message: 'Provide email and password.' });
@@ -64,27 +63,20 @@ class Login extends Component {
   }
 
   createUser() {
-    const {
-      email,
-      password
-    } = this.state;
+    const { email, password } = this.state;
+    const { authLoader: authLoad } = this.props;
 
-    this.props.authLoader(email, password);
+    authLoad(email, password);
   }
 
   render() {
     const { isFetching, auth } = this.props;
-
-    const {
-      message,
-      email,
-      password
-    } = this.state;
+    const { message, email, password } = this.state;
 
     return (
       <div className="page-container login-form">
         <h2>Connect to Our Chat.</h2>
-        { message && <div className={auth.status ? 'success' : 'error'}>{message}</div> }
+        {message && <div className={auth.status ? 'success' : 'error'}>{message}</div>}
         <form className="form-wrapper" onSubmit={this.onSubmit}>
           <label htmlFor="email">
             <span>Email</span>
@@ -94,7 +86,9 @@ class Login extends Component {
             <span>Password</span>
             <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
           </label>
-          <button type="submit" disabled={isFetching}>{ isFetching ? "Loading..." : "Login"}</button>
+          <button type="submit" disabled={isFetching}>
+            {isFetching ? 'Loading...' : 'Login'}
+          </button>
         </form>
       </div>
     );
@@ -104,7 +98,7 @@ class Login extends Component {
 const mapStateToProps = state => ({
   auth: state.authentication.auth,
   serverMessage: state.authentication.message,
-  isFetching: state.authentication.isFetching,
+  isFetching: state.authentication.isFetching
 });
 
 Login.propTypes = {
@@ -115,4 +109,9 @@ Login.propTypes = {
   history: PropTypes.object.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { authLoader })(Login));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { authLoader }
+  )(Login)
+);

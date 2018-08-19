@@ -18,7 +18,7 @@ class ActiveUsers extends Component {
     this.socket = this.props.chatSocket;
 
     if (Object.keys(this.socket).length) {
-      this.socket.on('active users', (activeUsers) => {
+      this.socket.on('active users', activeUsers => {
         this.setState({ activeUsers });
       });
     }
@@ -31,8 +31,12 @@ class ActiveUsers extends Component {
 
     return (
       <li key={user.id}>
-        { user.profileImage ? <img className="thumb-img" src={user.profileImage} alt={user.nickname} /> : <div className="anonymous-thumb" /> }
-        { user.nickname } <span className={nicknameClass} />
+        {user.profileImage ? (
+          <img className="thumb-img" src={user.profileImage} alt={user.nickname} />
+        ) : (
+          <div className="anonymous-thumb" />
+        )}
+        {user.nickname} <span className={nicknameClass} />
       </li>
     );
   }
@@ -41,16 +45,12 @@ class ActiveUsers extends Component {
     const { auth, isFetching, users, menuOpen } = this.props;
 
     if (!auth.status) {
-      return null
-    }      
+      return null;
+    }
 
     return (
       <div className={`users-list-wrapper${menuOpen ? ' open' : ''}`}>
-        <ul className="user-list">
-          { isFetching ? (
-            <li>Loading...</li>
-          ) : users.map(user => this.renderUsers(user)) }
-        </ul>
+        <ul className="user-list">{isFetching ? <li>Loading...</li> : users.map(user => this.renderUsers(user))}</ul>
       </div>
     );
   }
@@ -72,4 +72,7 @@ ActiveUsers.propTypes = {
   chatSocket: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps, { getUsersList })(ActiveUsers);
+export default connect(
+  mapStateToProps,
+  { getUsersList }
+)(ActiveUsers);

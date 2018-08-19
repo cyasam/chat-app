@@ -9,9 +9,11 @@ import clickMenu from '../actions/menu-click-action';
 const Header = props => (
   <header className="main-header">
     <div className="header-inner">
-      <h1 className="logo"><Link to="/">ChatApp</Link></h1>
+      <h1 className="logo">
+        <Link to="/">ChatApp</Link>
+      </h1>
       <nav>
-        { props.auth.status &&
+        {props.auth.status && (
           <button
             className="menu-btn"
             onClick={() => {
@@ -20,8 +22,8 @@ const Header = props => (
           >
             <MdMenu />
           </button>
-        }
-        { props.auth.status ? (
+        )}
+        {props.auth.status ? (
           <Fragment>
             <Link to="/profile">Profile</Link>
           </Fragment>
@@ -32,7 +34,7 @@ const Header = props => (
           </Fragment>
         )}
       </nav>
-      { props.auth.status && (
+      {props.auth.status && (
         <button className="logout-btn" onClick={props.logout}>
           Logout
         </button>
@@ -51,4 +53,9 @@ Header.propTypes = {
   clickMenu: PropTypes.func.isRequired
 };
 
-export default withRouter(connect(mapStateToProps, { logout, clickMenu })(Header));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { logout, clickMenu }
+  )(Header)
+);
