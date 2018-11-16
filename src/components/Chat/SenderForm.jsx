@@ -17,22 +17,38 @@ class SenderForm extends Component {
     event.preventDefault();
     if (this.state.message.length) {
       this.props.onSubmit(this.state.message);
-      this.setState({ message: '' });
+      this.setState({
+        message: ''
+      });
     }
   }
 
   onChange(event) {
-    this.setState({ message: event.target.value });
-    this.props.onInputChange(event);
+    this.setState({
+      message: event.target.value
+    });
+    const [onInputChange] = this.props;
+    onInputChange(event);
   }
 
   render() {
+    const { message } = this.state;
     return (
-      <form className="form-wrapper chat" onSubmit={this.onSubmit} autoComplete="off">
+      <form
+        className="form-wrapper chat"
+        onSubmit={this.onSubmit}
+        autoComplete="off"
+      >
         <label htmlFor="message">
-          <input id="message" name="message" value={this.state.message} type="text" onChange={this.onChange} />
-        </label>
-        <button type="submit">Send</button>
+          <input
+            id="message"
+            name="message"
+            value={message}
+            type="text"
+            onChange={this.onChange}
+          />{' '}
+        </label>{' '}
+        <button type="submit"> Send </button>{' '}
       </form>
     );
   }

@@ -16,7 +16,7 @@ class Chat extends Component {
     this.onInputChange = this.onInputChange.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.socket = this.props.chatSocket;
 
     if (Object.keys(this.socket).length) {
@@ -65,7 +65,9 @@ class Chat extends Component {
   startSocket() {
     this.socket.on('new message', message => {
       const { messageList } = this.state;
-      const newMessage = messageList.find(item => item.email === message.email && item.typing);
+      const newMessage = messageList.find(
+        item => item.email === message.email && item.typing
+      );
 
       if (newMessage) {
         const index = messageList.indexOf(newMessage);
@@ -82,13 +84,17 @@ class Chat extends Component {
         newMessageObj.profileImage = this.getProfileImage(message.email);
         newMessageObj.self = message.email === this.props.email;
 
-        this.setState({ messageList: [...this.state.messageList, newMessageObj] });
+        this.setState({
+          messageList: [...this.state.messageList, newMessageObj]
+        });
       }
     });
 
     this.socket.on('typing', typingObj => {
       const data = { ...typingObj };
-      const message = this.state.messageList.find(item => item.email === typingObj.email && item.typing);
+      const message = this.state.messageList.find(
+        item => item.email === typingObj.email && item.typing
+      );
 
       if (!message && typingObj.email !== this.props.email) {
         data.id = this.state.messageList.length;
@@ -101,7 +107,9 @@ class Chat extends Component {
 
     this.socket.on('stop typing', typingObj => {
       const messageList = [...this.state.messageList];
-      const message = this.state.messageList.filter(item => item.email === typingObj.email && item.typing);
+      const message = this.state.messageList.filter(
+        item => item.email === typingObj.email && item.typing
+      );
 
       if (message.length && typingObj.email !== this.props.email) {
         const index = messageList.indexOf(message);
@@ -120,7 +128,10 @@ class Chat extends Component {
     return (
       <div className="chat-screen">
         <MessageScreen messageList={this.state.messageList} />
-        <SenderForm onSubmit={this.onSubmit} onInputChange={this.onInputChange} />
+        <SenderForm
+          onSubmit={this.onSubmit}
+          onInputChange={this.onInputChange}
+        />
       </div>
     );
   }

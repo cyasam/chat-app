@@ -3,10 +3,11 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validator from 'validator';
-import { MdWarning, MdDone } from 'react-icons/lib/md';
+import { MdWarning, MdDone } from 'react-icons/md';
+
+import getUsersList from '../actions/get-users-list-action';
 import helpers from '../helpers';
 import profileFormLoader from '../actions/profile-form-action';
-import Loading from './Loading';
 import ProfileImage from './ProfileImage';
 
 class ProfileForm extends Component {
@@ -33,32 +34,40 @@ class ProfileForm extends Component {
     this.resetImage = this.resetImage.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { formStatus, firstLoad } = this.state;
+  static getDerivedStateFromProps(nextProps, state) {
+    const { formStatus, firstLoad } = state;
+    const { data } = nextProps;
 
     if (!formStatus && firstLoad) {
-      const { data } = nextProps;
-      this.setState({
-        ...data,
-        profileImageOld: nextProps.data.profileImage,
-        firstLoad: false,
-        message: ''
-      });
+      if (Object.keys(data).length) {
+        return {
+          ...data,
+          profileImageOld: data.profileImage,
+          firstLoad: false,
+          message: ''
+        };
+      }
     } else {
       if (nextProps.formStatus) {
-        const { data } = nextProps;
-        this.setState({
+        let resetObj = {};
+
+        if (data.status) {
+          resetObj = { password: '', confirmPassword: '' };
+        }
+
+        nextProps.getUsersList();
+        return {
           ...data,
-          profileImageOld: nextProps.data.profileImage
-        });
+          profileImageOld: data.profileImage,
+          ...resetObj
+        };
       }
-      this.resetForm(nextProps);
     }
 
-    this.setState({
+    return {
       formStatus: nextProps.formStatus,
       message: nextProps.serverMessage
-    });
+    };
   }
 
   onChange(e) {
@@ -104,7 +113,14 @@ class ProfileForm extends Component {
   }
 
   onValidate() {
-    const { minStringLength, minPasswordLength, nickname, name, password, confirmPassword } = this.state;
+    const {
+      minStringLength,
+      minPasswordLength,
+      nickname,
+      name,
+      password,
+      confirmPassword
+    } = this.state;
 
     if (!validator.isLength(nickname, { min: minStringLength })) {
       this.setState({ message: 'Provide your nickname.' });
@@ -117,11 +133,16 @@ class ProfileForm extends Component {
     }
 
     if (validator.isLength(password, { min: 1, max: minPasswordLength - 1 })) {
-      this.setState({ message: `Password length must be at least ${minPasswordLength}.` });
+      this.setState({
+        message: `Password length must be at least ${minPasswordLength}.`
+      });
       return false;
     }
 
-    if (validator.isLength(password, { min: 1 }) && password !== confirmPassword) {
+    if (
+      validator.isLength(password, { min: 1 }) &&
+      password !== confirmPassword
+    ) {
       this.setState({ message: 'Password and Confirm password not matched.' });
       return false;
     }
@@ -133,19 +154,11 @@ class ProfileForm extends Component {
     this.setState(prevState => ({ [name]: prevState[`${name}Old`] }));
   }
 
-  resetForm(props) {
-    if (props.data.status) {
-      const resetObj = {
-        password: '',
-        confirmPassword: ''
-      };
-      this.setState({ ...resetObj });
-    }
-  }
-
   emailActiveStatus() {
     const { data } = this.props;
-    const emailBoxClassName = `email-active-box ${data.activated ? 'active' : 'not-active'}`;
+    const emailBoxClassName = `email-active-box ${
+      data.activated ? 'active' : 'not-active'
+    }`;
 
     return (
       <div className={emailBoxClassName}>
@@ -171,17 +184,19 @@ class ProfileForm extends Component {
   renderMessage() {
     const { message, formStatus } = this.state;
 
-    return <Fragment>{message && <div className={formStatus ? 'success' : 'error'}>{message}</div>}</Fragment>;
+    return (
+      <Fragment>
+        {message && (
+          <div className={formStatus ? 'success' : 'error'}>{message}</div>
+        )}
+      </Fragment>
+    );
   }
 
   render() {
     const { isFetching, data } = this.props;
 
     const { nickname, name, password, confirmPassword } = this.state;
-
-    if (isFetching) {
-      return <Loading />;
-    }
 
     const { profileImageOld } = this.state;
 
@@ -212,11 +227,23 @@ class ProfileForm extends Component {
               </div>
               <label htmlFor="name">
                 <span>Name</span>
-                <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
+                <input
+                  id="name"
+                  name="name"
+                  type="text"
+                  value={name}
+                  onChange={this.onChange}
+                />
               </label>
               <label htmlFor="password">
                 <span>Password</span>
-                <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={this.onChange}
+                />
               </label>
               <label htmlFor="confirm-password">
                 <span>Confirm password</span>
@@ -250,12 +277,13 @@ ProfileForm.propTypes = {
   formStatus: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
   serverMessage: PropTypes.string.isRequired,
-  profileFormLoader: PropTypes.func.isRequired
+  profileFormLoader: PropTypes.func.isRequired,
+  getUsersList: PropTypes.func.isRequired
 };
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { profileFormLoader }
+    { profileFormLoader, getUsersList }
   )(ProfileForm)
 );

@@ -15,7 +15,7 @@ class RegisterComplete extends Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const {
       history,
       location: { search, state },

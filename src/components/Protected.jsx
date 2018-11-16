@@ -6,7 +6,7 @@ import config from '../config';
 
 export default ComposedComponent => {
   class Protected extends Component {
-    componentWillMount() {
+    componentDidMount() {
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
       const { auth, history, chatSocket, email } = this.props;
 

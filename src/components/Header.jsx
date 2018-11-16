@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { MdMenu } from 'react-icons/lib/md';
+import { MdMenu } from 'react-icons/md';
 import logout from '../actions/logout-action';
 import clickMenu from '../actions/menu-click-action';
 

@@ -1,32 +1,37 @@
-import React, { Fragment } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect
+} from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Loadable from 'react-loadable';
 
 // Components
-import Loading from './components/Loading';
 import Header from './components/Header';
 import Protected from './components/Protected';
+import RouteLoading from './components/RouteLoading';
 
 const Home = Loadable({
   loader: () => import('./pages/Home'),
-  loading: Loading
+  loading: () => <RouteLoading />
 });
 
 const RegisterIndex = Loadable({
   loader: () => import('./pages/register'),
-  loading: Loading
+  loading: () => <RouteLoading />
 });
 
 const Login = Loadable({
   loader: () => import('./pages/Login'),
-  loading: Loading
+  loading: () => <RouteLoading />
 });
 
 const Profile = Loadable({
   loader: () => import('./pages/Profile'),
-  loading: Loading
+  loading: () => <RouteLoading />
 });
 
 const ActiveUsers = Loadable({
@@ -55,7 +60,7 @@ const AppContainer = props => (
           <Route path="/register" component={RegisterIndex} />
           <Route path="/login" component={Login} />
           <Route path="/profile" component={Protected(Profile)} />
-          <Route component={Home} />
+          <Redirect to="/" path="*" />
         </Switch>
       </div>
     </div>

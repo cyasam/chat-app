@@ -57,7 +57,15 @@ class Register extends Component {
   }
 
   onValidate() {
-    const { minStringLength, minPasswordLength, name, nickname, email, password, confirmPassword } = this.state;
+    const {
+      minStringLength,
+      minPasswordLength,
+      name,
+      nickname,
+      email,
+      password,
+      confirmPassword
+    } = this.state;
     const { nicknameStatus } = this.props;
 
     if (!validator.isLength(nickname, { min: minStringLength })) {
@@ -91,7 +99,9 @@ class Register extends Component {
     }
 
     if (!validator.isLength(password, { min: minPasswordLength })) {
-      this.setState({ message: `Password length must be at least ${minPasswordLength}.` });
+      this.setState({
+        message: `Password length must be at least ${minPasswordLength}.`
+      });
       return false;
     }
 
@@ -120,27 +130,59 @@ class Register extends Component {
   render() {
     const { isFetching, status } = this.props;
 
-    const { minStringLength, message, name, nickname, email, password, confirmPassword } = this.state;
+    const {
+      minStringLength,
+      message,
+      name,
+      nickname,
+      email,
+      password,
+      confirmPassword
+    } = this.state;
 
     return (
       <Fragment>
         <div className="register-form">
           <h2>Join Us Now</h2>
           {isFetching && <Loading className="app" />}
-          {message && <div className={status ? 'success' : 'error'}>{message}</div>}
+          {message && (
+            <div className={status ? 'success' : 'error'}>{message}</div>
+          )}
           <form className="form-wrapper" onSubmit={this.onSubmit}>
-            <NicknameInput value={nickname} minLength={minStringLength} onChange={this.onChange} />
+            <NicknameInput
+              value={nickname}
+              minLength={minStringLength}
+              onChange={this.onChange}
+            />
             <label htmlFor="email">
               <span>Email</span>
-              <input id="email" name="email" type="email" value={email} onChange={this.onChange} />
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={this.onChange}
+              />
             </label>
             <label htmlFor="name">
               <span>Name</span>
-              <input id="name" name="name" type="text" value={name} onChange={this.onChange} />
+              <input
+                id="name"
+                name="name"
+                type="text"
+                value={name}
+                onChange={this.onChange}
+              />
             </label>
             <label htmlFor="password">
               <span>Password</span>
-              <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
+              <input
+                id="password"
+                name="password"
+                type="password"
+                value={password}
+                onChange={this.onChange}
+              />
             </label>
             <label htmlFor="confirm-password">
               <span>Confirm password</span>

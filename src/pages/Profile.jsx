@@ -2,20 +2,12 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Loadable from 'react-loadable';
 import profileLoader from '../actions/profile-action';
-import Loading from '../components/Loading';
-
-const ProfileForm = Loadable({
-  loader: () => import('../components/ProfileForm'),
-  loading() {
-    return null;
-  }
-});
+import ProfileForm from '../components/ProfileForm';
 
 class Profile extends Component {
-  async componentWillMount() {
-    await this.props.profileLoader();
+  componentDidMount() {
+    this.props.profileLoader();
   }
 
   render() {
@@ -23,8 +15,8 @@ class Profile extends Component {
 
     return (
       <div className="page-container">
-        {message && <div className="error">{message}</div>}
-        <ProfileForm data={data} />
+        {message && <div className="error"> {message} </div>}{' '}
+        <ProfileForm data={data} />{' '}
       </div>
     );
   }
@@ -46,6 +38,8 @@ Profile.propTypes = {
 export default withRouter(
   connect(
     mapStateToProps,
-    { profileLoader }
+    {
+      profileLoader
+    }
   )(Profile)
 );

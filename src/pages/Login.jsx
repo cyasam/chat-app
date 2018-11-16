@@ -26,13 +26,15 @@ class Login extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ message: nextProps.serverMessage });
-
+  static getDerivedStateFromProps(nextProps) {
     if (nextProps.auth.status) {
       const { history } = this.props;
       history.push('/');
+
+      return {};
     }
+
+    return { message: nextProps.serverMessage };
   }
 
   onChange(e) {
@@ -76,15 +78,29 @@ class Login extends Component {
     return (
       <div className="page-container login-form">
         <h2>Connect to Our Chat.</h2>
-        {message && <div className={auth.status ? 'success' : 'error'}>{message}</div>}
+        {message && (
+          <div className={auth.status ? 'success' : 'error'}>{message}</div>
+        )}
         <form className="form-wrapper" onSubmit={this.onSubmit}>
           <label htmlFor="email">
             <span>Email</span>
-            <input id="email" name="email" type="email" value={email} onChange={this.onChange} />
+            <input
+              id="email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={this.onChange}
+            />
           </label>
           <label htmlFor="password">
             <span>Password</span>
-            <input id="password" name="password" type="password" value={password} onChange={this.onChange} />
+            <input
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={this.onChange}
+            />
           </label>
           <button type="submit" disabled={isFetching}>
             {isFetching ? 'Loading...' : 'Login'}
