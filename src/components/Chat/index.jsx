@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import MessageScreen from './MessageScreen';
@@ -135,13 +135,13 @@ class Chat extends Component {
     }
 
     return (
-      <div className="chat-screen">
+      <Fragment>
         <MessageScreen messageList={messageList} />
         <SenderForm
           onSubmit={this.onSubmit}
           onInputChange={this.onInputChange}
         />
-      </div>
+      </Fragment>
     );
   }
 }
