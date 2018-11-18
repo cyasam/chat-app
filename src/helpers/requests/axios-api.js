@@ -1,8 +1,6 @@
 import axios from 'axios';
 import config from '../../config';
-import {
-  AUTH_ERROR
-} from '../../actions/auth-action';
+import { AUTH_ERROR } from '../../actions/auth-action';
 
 const init = () => {
   const instance = axios.create({
