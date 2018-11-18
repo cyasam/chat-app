@@ -1,7 +1,8 @@
-import { combineReducers } from 'redux';
+import {
+  combineReducers
+} from 'redux';
 import authReducer from './auth-reducer';
 import registerReducer from './register-reducer';
-import registerFormReducer from './register-form-reducer';
 import profileReducer from './profile-reducer';
 import profileFormReducer from './profile-form-reducer';
 import getUsersListReducer from './get-users-list-reducer';
@@ -12,7 +13,6 @@ import menuClickReducer from './menu-click-reducer';
 export default combineReducers({
   authentication: authReducer,
   register: registerReducer,
-  registerForm: registerFormReducer,
   profile: profileReducer,
   profileForm: profileFormReducer,
   usersList: getUsersListReducer,

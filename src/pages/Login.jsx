@@ -19,13 +19,6 @@ class Login extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  componentDidMount() {
-    const { auth, history } = this.props;
-    if (auth.status) {
-      history.push('/');
-    }
-  }
-
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.auth.status) {
       const { history } = nextProps;
@@ -122,8 +115,7 @@ const mapStateToProps = state => ({
 Login.propTypes = {
   auth: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  authLoader: PropTypes.func.isRequired,
-  history: PropTypes.object.isRequired
+  authLoader: PropTypes.func.isRequired
 };
 
 export default withRouter(

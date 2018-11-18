@@ -24,12 +24,14 @@ class RegisterComplete extends Component {
     const params = new URLSearchParams(search);
     const key = params.get('key');
 
-    if (!state && !key) {
+    if (!state) {
       history.push('/');
-    } else if (key) {
+    }
+    if (key) {
       const fetchData = { key };
       register(fetchData);
-    } else if (state) {
+    }
+    if (state) {
       const { activated, message } = state;
       this.setState({ activated, message });
     }

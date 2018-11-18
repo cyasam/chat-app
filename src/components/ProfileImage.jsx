@@ -14,14 +14,8 @@ class ProfileImage extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onChangeProfileImage = this.onChangeProfileImage.bind(this);
     this.resetImage = this.resetImage.bind(this);
-  }
 
-  static getDerivedStateFromProps(nextProps, state) {
-    if (state.oldImage !== nextProps.oldImage) {
-      return { previewImage: false };
-    }
-
-    return null;
+    this.profileImageBox = React.createRef();
   }
 
   onChangeProfileImage(event) {
@@ -42,7 +36,9 @@ class ProfileImage extends Component {
       this.croppie.destroy();
     }
 
-    this.croppie = new Croppie(this.profileImageBox, {
+    const profileImageBox = this.profileImageBox.current;
+
+    this.croppie = new Croppie(profileImageBox, {
       viewport: {
         width,
         height,
@@ -58,7 +54,7 @@ class ProfileImage extends Component {
       url: image.src
     });
 
-    this.profileImageBox.addEventListener('update', () => {
+    profileImageBox.addEventListener('update', () => {
       const { name } = this.state;
       const { onChange } = this.props;
 
@@ -111,12 +107,7 @@ class ProfileImage extends Component {
       >
         {previewImage ? (
           <div className="preview-box-container">
-            <div
-              className="preview-box"
-              ref={profileImageBox => {
-                this.profileImageBox = profileImageBox;
-              }}
-            />
+            <div className="preview-box" ref={this.profileImageBox} />
             <button type="submit" className="button">
               Save
             </button>

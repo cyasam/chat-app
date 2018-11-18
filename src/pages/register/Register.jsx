@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import validator from 'validator';
-import registerFormLoader from '../../actions/register-form-action';
+import registerFormLoadAction from '../../actions/register-form-action';
 import Loading from '../../components/Loading';
 import NicknameInput from '../../components/NicknameInput';
 
@@ -26,18 +26,15 @@ class Register extends Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  componentDidMount() {
-    const { auth, history } = this.props;
+  static getDerivedStateFromProps(nextProps) {
+    const { auth, status, serverMessage, history } = nextProps;
+
     if (auth.status) {
       history.push('/');
     }
-  }
-
-  static getDerivedStateFromProps(nextProps) {
-    const { status, serverMessage } = nextProps;
 
     if (status) {
-      const { history, match } = this.props;
+      const { match } = nextProps;
       history.push({
         pathname: `${match.url}/complete`,
         state: { activated: status, message: serverMessage }
@@ -125,7 +122,7 @@ class Register extends Component {
       password
     };
 
-    const { registerFormLoader: registerFormLoad } = this.props;
+    const { registerFormLoad } = this.props;
     registerFormLoad(fetchData);
   }
 
@@ -218,25 +215,22 @@ class Register extends Component {
 
 const mapStateToProps = state => ({
   auth: state.authentication.auth,
-  status: state.registerForm.status,
-  serverMessage: state.registerForm.message,
-  isFetching: state.registerForm.isFetching,
+  status: state.register.status,
+  serverMessage: state.register.message,
+  isFetching: state.register.isFetching,
   nicknameStatus: state.checkNickname.status
 });
 
 Register.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  auth: PropTypes.object.isRequired,
   status: PropTypes.bool.isRequired,
   nicknameStatus: PropTypes.bool.isRequired,
-  registerFormLoader: PropTypes.func.isRequired,
-  match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired
+  registerFormLoad: PropTypes.func.isRequired
 };
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { registerFormLoader }
+    { registerFormLoad: registerFormLoadAction }
   )(Register)
 );

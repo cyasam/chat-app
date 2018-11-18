@@ -16,8 +16,7 @@ export default fetchData => dispatch => {
     .auth({
       method: 'post',
       url: '/register',
-      data: fetchData,
-      timeout: 5000
+      data: fetchData
     })
     .then(result => {
       if (result.data.status) {
