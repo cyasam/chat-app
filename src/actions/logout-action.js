@@ -8,7 +8,12 @@ export default () => dispatch => {
   dispatch({
     type: LOGOUT_LOADING,
     payload: {
-      isFetching: true
+      authentication: {
+        isFetching: true
+      },
+      profile: {
+        isFetching: true
+      }
     }
   });
 
@@ -18,19 +23,32 @@ export default () => dispatch => {
     dispatch({
       type: LOGOUT_SUCCESS,
       payload: {
-        isFetching: false,
-        auth: {
-          status: false
+        authentication: {
+          isFetching: false,
+          auth: {
+            status: false
+          },
+          message: ''
         },
-        message: ''
+        profile: {
+          isFetching: false,
+          data: {},
+          message: ''
+        }
       }
     });
   } else {
     dispatch({
       type: LOGOUT_ERROR,
       payload: {
-        isFetching: false,
-        message: ''
+        authentication: {
+          isFetching: false,
+          message: ''
+        },
+        profile: {
+          isFetching: false,
+          message: ''
+        }
       }
     });
   }

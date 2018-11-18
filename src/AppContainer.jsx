@@ -60,9 +60,9 @@ const AppContainer = props => {
           {auth.status && <ActiveUsers />}
           <Switch>
             <Route path="/" exact component={Protected(Home)} />
+            <Route path="/profile" component={Protected(Profile)} />
             <Route path="/register" component={RegisterIndex} />
             <Route path="/login" component={Login} />
-            <Route path="/profile" component={Protected(Profile)} />
             <Redirect to="/" path="*" />
           </Switch>
         </div>

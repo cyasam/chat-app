@@ -32,6 +32,13 @@ export default ComposedComponent => {
     }
 
     render() {
+      const { auth } = this.props;
+      const token = localStorage.getItem(config.TOKEN_KEY_NAME);
+
+      if (!auth.status && !token) {
+        return null;
+      }
+
       return <ComposedComponent {...this.props} />;
     }
   }
