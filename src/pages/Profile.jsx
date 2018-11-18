@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import profileLoader from '../actions/profile-action';
+import profileLoaderAction from '../actions/profile-action';
 import ProfileForm from '../components/ProfileForm';
 
 class Profile extends Component {
   componentDidMount() {
-    this.props.profileLoader();
+    const { profileLoader } = this.props;
+    profileLoader();
   }
 
   render() {
@@ -29,7 +30,6 @@ const mapStateToProps = state => ({
 });
 
 Profile.propTypes = {
-  isFetching: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
   message: PropTypes.string.isRequired,
   profileLoader: PropTypes.func.isRequired
@@ -38,8 +38,6 @@ Profile.propTypes = {
 export default withRouter(
   connect(
     mapStateToProps,
-    {
-      profileLoader
-    }
+    { profileLoader: profileLoaderAction }
   )(Profile)
 );

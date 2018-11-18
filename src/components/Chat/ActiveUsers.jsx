@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import getUsersList from '../../actions/get-users-list-action';
+import getUsersListAction from '../../actions/get-users-list-action';
 
 class ActiveUsers extends Component {
   constructor() {
@@ -13,14 +13,21 @@ class ActiveUsers extends Component {
   }
 
   componentDidMount() {
-    this.props.getUsersList();
+    const { getUsersList, chatSocket } = this.props;
+    getUsersList();
 
-    this.socket = this.props.chatSocket;
+    this.socket = chatSocket;
 
     if (Object.keys(this.socket).length) {
       this.socket.on('active users', activeUsers => {
         this.setState({ activeUsers });
       });
+    }
+  }
+
+  componentWillUnmount() {
+    if (Object.keys(this.socket).length) {
+      this.socket.disconnect();
     }
   }
 
@@ -77,6 +84,7 @@ const mapStateToProps = state => ({
 });
 
 ActiveUsers.propTypes = {
+  auth: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
   users: PropTypes.array.isRequired,
   menuOpen: PropTypes.bool.isRequired,
@@ -86,5 +94,5 @@ ActiveUsers.propTypes = {
 
 export default connect(
   mapStateToProps,
-  { getUsersList }
+  { getUsersList: getUsersListAction }
 )(ActiveUsers);

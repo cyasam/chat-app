@@ -16,10 +16,12 @@ class ProfileImage extends Component {
     this.resetImage = this.resetImage.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.props.oldImage !== nextProps.oldImage) {
-      this.setState({ previewImage: false });
+  static getDerivedStateFromProps(nextProps, state) {
+    if (state.oldImage !== nextProps.oldImage) {
+      return { previewImage: false };
     }
+
+    return null;
   }
 
   onChangeProfileImage(event) {
@@ -57,8 +59,11 @@ class ProfileImage extends Component {
     });
 
     this.profileImageBox.addEventListener('update', () => {
+      const { name } = this.state;
+      const { onChange } = this.props;
+
       this.croppie.result({ type: 'blob', format: 'png' }).then(result => {
-        this.props.onChange(this.state.name, result);
+        onChange(name, result);
       });
     });
   }
@@ -81,18 +86,30 @@ class ProfileImage extends Component {
   }
 
   resetImage() {
-    this.props.resetImage(this.state.name);
+    const { name } = this.state;
+    const { resetImage } = this.props;
+
+    resetImage(name);
     this.setState({ previewImage: false });
   }
 
   changeImageNameStr() {
-    return this.props.oldImage ? this.props.oldImage.replace('-thumb', '') : this.props.oldImage;
+    const { oldImage } = this.props;
+
+    return oldImage ? oldImage.replace('-thumb', '') : oldImage;
   }
 
   render() {
+    const { previewImage } = this.state;
+    const { oldImage } = this.props;
+
     return (
-      <form className="profile-image-box" onSubmit={this.onSubmit} encType="multipart/form-data">
-        {this.state.previewImage ? (
+      <form
+        className="profile-image-box"
+        onSubmit={this.onSubmit}
+        encType="multipart/form-data"
+      >
+        {previewImage ? (
           <div className="preview-box-container">
             <div
               className="preview-box"
@@ -100,15 +117,27 @@ class ProfileImage extends Component {
                 this.profileImageBox = profileImageBox;
               }}
             />
-            <button className="button">Save</button>
-            <div className="button" role="link" onClick={this.resetImage} onKeyDown={this.resetImage} tabIndex={0}>
+            <button type="submit" className="button">
+              Save
+            </button>
+            <div
+              className="button"
+              role="link"
+              onClick={this.resetImage}
+              onKeyDown={this.resetImage}
+              tabIndex={0}
+            >
               Cancel
             </div>
           </div>
         ) : (
           <label htmlFor="profile-image-input">
-            {this.props.oldImage ? (
-              <img src={this.changeImageNameStr()} className="profile-placeholder" alt="" />
+            {oldImage ? (
+              <img
+                src={this.changeImageNameStr()}
+                className="profile-placeholder"
+                alt=""
+              />
             ) : (
               <div className="profile-placeholder" />
             )}

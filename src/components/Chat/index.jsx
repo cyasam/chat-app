@@ -17,7 +17,8 @@ class Chat extends Component {
   }
 
   componentDidMount() {
-    this.socket = this.props.chatSocket;
+    const { chatSocket } = this.props;
+    this.socket = chatSocket;
 
     if (Object.keys(this.socket).length) {
       this.startSocket();
@@ -25,19 +26,21 @@ class Chat extends Component {
   }
 
   onSubmit(text) {
+    const { messageList } = this.state;
+    const { nickname, profileImage } = this.props;
+
     this.socket.emit('new message', text);
     const messageObj = {
-      id: this.state.messageList.length,
+      id: messageList.length,
       email: null,
-      nickname: this.props.nickname,
-      profileImage: this.props.profileImage,
+      nickname,
+      profileImage,
       text,
       typing: false,
       self: true
     };
 
-    const messageList = [...this.state.messageList, messageObj];
-    this.setState({ messageList });
+    this.setState({ messageList: [...messageList, messageObj] });
   }
 
   onInputChange() {
@@ -59,12 +62,15 @@ class Chat extends Component {
   }
 
   getProfileImage(email) {
-    return this.props.users.find(user => user.email === email).profileImage;
+    const { users } = this.props;
+    return users.find(user => user.email === email).profileImage;
   }
 
   startSocket() {
+    const { messageList } = this.state;
+    const { email } = this.props;
+
     this.socket.on('new message', message => {
-      const { messageList } = this.state;
       const newMessage = messageList.find(
         item => item.email === message.email && item.typing
       );
@@ -74,7 +80,7 @@ class Chat extends Component {
         messageList[index].text = message.text;
         messageList[index].typing = false;
         messageList[index].profileImage = this.getProfileImage(message.email);
-        messageList[index].self = message.email === this.props.email;
+        messageList[index].self = message.email === email;
 
         this.setState({ messageList });
       } else {
@@ -82,52 +88,55 @@ class Chat extends Component {
         newMessageObj.id = messageList.length;
         newMessageObj.typing = false;
         newMessageObj.profileImage = this.getProfileImage(message.email);
-        newMessageObj.self = message.email === this.props.email;
+        newMessageObj.self = message.email === email;
 
         this.setState({
-          messageList: [...this.state.messageList, newMessageObj]
+          messageList: [...messageList, newMessageObj]
         });
       }
     });
 
     this.socket.on('typing', typingObj => {
       const data = { ...typingObj };
-      const message = this.state.messageList.find(
+      const message = messageList.find(
         item => item.email === typingObj.email && item.typing
       );
 
-      if (!message && typingObj.email !== this.props.email) {
-        data.id = this.state.messageList.length;
+      if (!message && typingObj.email !== email) {
+        data.id = messageList.length;
         data.text = 'typing';
         data.typing = true;
         data.profileImage = this.getProfileImage(typingObj.email);
-        this.setState({ messageList: [...this.state.messageList, data] });
+        this.setState({ messageList: [...messageList, data] });
       }
     });
 
     this.socket.on('stop typing', typingObj => {
-      const messageList = [...this.state.messageList];
-      const message = this.state.messageList.filter(
+      const messageListClone = [...messageList];
+      const message = messageList.filter(
         item => item.email === typingObj.email && item.typing
       );
 
-      if (message.length && typingObj.email !== this.props.email) {
+      if (message.length && typingObj.email !== email) {
         const index = messageList.indexOf(message);
-        messageList.splice(index, 1);
+        messageListClone.splice(index, 1);
       }
 
-      this.setState({ messageList });
+      this.setState({ messageList: messageListClone });
     });
   }
 
   render() {
-    if (!this.props.email) {
+    const { messageList } = this.state;
+    const { email } = this.props;
+
+    if (!email) {
       return null;
     }
 
     return (
       <div className="chat-screen">
-        <MessageScreen messageList={this.state.messageList} />
+        <MessageScreen messageList={messageList} />
         <SenderForm
           onSubmit={this.onSubmit}
           onInputChange={this.onInputChange}

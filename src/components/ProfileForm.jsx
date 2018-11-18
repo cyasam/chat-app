@@ -47,21 +47,21 @@ class ProfileForm extends Component {
           message: ''
         };
       }
-    } else {
-      if (nextProps.formStatus) {
-        let resetObj = {};
+    }
 
-        if (data.status) {
-          resetObj = { password: '', confirmPassword: '' };
-        }
+    if (nextProps.formStatus) {
+      let resetObj = {};
 
-        nextProps.getUsersList();
-        return {
-          ...data,
-          profileImageOld: data.profileImage,
-          ...resetObj
-        };
+      if (data.status) {
+        resetObj = { password: '', confirmPassword: '' };
       }
+
+      nextProps.getUsersList();
+      return {
+        ...data,
+        profileImageOld: data.profileImage,
+        ...resetObj
+      };
     }
 
     return {
@@ -214,19 +214,27 @@ class ProfileForm extends Component {
           </div>
           <form className="form-wrapper" onSubmit={this.onSubmit}>
             <div className="form-inner">
-              <div className="label">
-                <span>Email</span>
+              <div className="form-row">
+                <div className="label">
+                  <span>Email</span>
+                </div>
                 <div className="value">
                   <span>{data.email}</span>
                   <span>{this.emailActiveStatus()}</span>
                 </div>
               </div>
-              <div className="label">
-                <span>Nickname</span>
+
+              <div className="form-row">
+                <div className="label">
+                  <span>Nickname</span>
+                </div>
                 <div className="value">{nickname}</div>
               </div>
-              <label htmlFor="name">
-                <span>Name</span>
+
+              <div className="form-row">
+                <label htmlFor="name">
+                  <span>Name</span>
+                </label>
                 <input
                   id="name"
                   name="name"
@@ -234,9 +242,11 @@ class ProfileForm extends Component {
                   value={name}
                   onChange={this.onChange}
                 />
-              </label>
-              <label htmlFor="password">
-                <span>Password</span>
+              </div>
+              <div className="form-row">
+                <label htmlFor="password">
+                  <span>Password</span>
+                </label>
                 <input
                   id="password"
                   name="password"
@@ -244,9 +254,11 @@ class ProfileForm extends Component {
                   value={password}
                   onChange={this.onChange}
                 />
-              </label>
-              <label htmlFor="confirm-password">
-                <span>Confirm password</span>
+              </div>
+              <div className="form-row">
+                <label htmlFor="confirm-password">
+                  <span>Confirm password</span>
+                </label>
                 <input
                   id="confirm-password"
                   name="confirmPassword"
@@ -254,7 +266,7 @@ class ProfileForm extends Component {
                   value={confirmPassword}
                   onChange={this.onChange}
                 />
-              </label>
+              </div>
               <button type="submit" disabled={isFetching}>
                 Save Profile
               </button>
@@ -274,11 +286,8 @@ const mapStateToProps = state => ({
 
 ProfileForm.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  formStatus: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
-  serverMessage: PropTypes.string.isRequired,
-  profileFormLoader: PropTypes.func.isRequired,
-  getUsersList: PropTypes.func.isRequired
+  profileFormLoader: PropTypes.func.isRequired
 };
 
 export default withRouter(

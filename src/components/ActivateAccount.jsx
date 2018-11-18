@@ -6,7 +6,11 @@ const ActivateAccount = props => {
   const { auth } = props;
   return (
     <Fragment>
-      {!auth.activated ? <div className="activation-warning error">Please activate your account.</div> : null}
+      {!auth.activated ? (
+        <div className="activation-warning error">
+          Please activate your account.
+        </div>
+      ) : null}
     </Fragment>
   );
 };

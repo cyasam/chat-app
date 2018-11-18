@@ -1,10 +1,11 @@
 import axios from 'axios';
 import config from '../../config';
-import { AUTH_ERROR } from '../../actions/auth-action';
+import {
+  AUTH_ERROR
+} from '../../actions/auth-action';
 
 const instance = axios.create({
-  baseURL: `${config.API_URL}/auth`,
-  timeout: 2000
+  baseURL: `${config.API_URL}/auth`
 });
 
 instance.interceptors.response.use(

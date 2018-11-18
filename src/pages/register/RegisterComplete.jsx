@@ -35,9 +35,9 @@ class RegisterComplete extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     const { activated, message } = nextProps;
-    this.setState({ activated, message });
+    return { activated, message };
   }
 
   render() {
@@ -63,8 +63,6 @@ const mapStateToProps = state => ({
 
 RegisterComplete.propTypes = {
   isFetching: PropTypes.bool.isRequired,
-  activated: PropTypes.bool.isRequired,
-  message: PropTypes.string.isRequired,
   registerAction: PropTypes.func.isRequired,
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired

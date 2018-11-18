@@ -15,8 +15,11 @@ class SenderForm extends Component {
 
   onSubmit(event) {
     event.preventDefault();
-    if (this.state.message.length) {
-      this.props.onSubmit(this.state.message);
+    const { message } = this.state;
+    const { onSubmit } = this.props;
+
+    if (message && message.length) {
+      onSubmit(message);
       this.setState({
         message: ''
       });
@@ -27,7 +30,7 @@ class SenderForm extends Component {
     this.setState({
       message: event.target.value
     });
-    const [onInputChange] = this.props;
+    const { onInputChange } = this.props;
     onInputChange(event);
   }
 

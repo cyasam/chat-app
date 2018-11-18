@@ -28,10 +28,8 @@ class Login extends Component {
 
   static getDerivedStateFromProps(nextProps) {
     if (nextProps.auth.status) {
-      const { history } = this.props;
+      const { history } = nextProps;
       history.push('/');
-
-      return {};
     }
 
     return { message: nextProps.serverMessage };
@@ -82,8 +80,10 @@ class Login extends Component {
           <div className={auth.status ? 'success' : 'error'}>{message}</div>
         )}
         <form className="form-wrapper" onSubmit={this.onSubmit}>
-          <label htmlFor="email">
-            <span>Email</span>
+          <div className="form-row">
+            <label htmlFor="email">
+              <span>Email</span>
+            </label>
             <input
               id="email"
               name="email"
@@ -91,9 +91,11 @@ class Login extends Component {
               value={email}
               onChange={this.onChange}
             />
-          </label>
-          <label htmlFor="password">
-            <span>Password</span>
+          </div>
+          <div className="form-row">
+            <label htmlFor="password">
+              <span>Password</span>
+            </label>
             <input
               id="password"
               name="password"
@@ -101,7 +103,7 @@ class Login extends Component {
               value={password}
               onChange={this.onChange}
             />
-          </label>
+          </div>
           <button type="submit" disabled={isFetching}>
             {isFetching ? 'Loading...' : 'Login'}
           </button>
@@ -119,7 +121,6 @@ const mapStateToProps = state => ({
 
 Login.propTypes = {
   auth: PropTypes.object.isRequired,
-  serverMessage: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
   authLoader: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired

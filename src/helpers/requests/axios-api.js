@@ -1,11 +1,12 @@
 import axios from 'axios';
 import config from '../../config';
-import { AUTH_ERROR } from '../../actions/auth-action';
+import {
+  AUTH_ERROR
+} from '../../actions/auth-action';
 
 const init = () => {
   const instance = axios.create({
-    baseURL: `${config.API_URL}/api`,
-    timeout: 2000
+    baseURL: `${config.API_URL}/api`
   });
 
   const token = localStorage.getItem(config.TOKEN_KEY_NAME);

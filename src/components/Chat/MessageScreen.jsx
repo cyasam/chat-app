@@ -7,6 +7,8 @@ class MessageScreen extends Component {
   }
 
   render() {
+    const { messageList } = this.props;
+
     return (
       <ul
         className="messages"
@@ -14,11 +16,15 @@ class MessageScreen extends Component {
           this.messagesEl = messagesEl;
         }}
       >
-        {this.props.messageList.map(message => (
+        {messageList.map(message => (
           <li className={message.self ? 'self' : 'others'} key={message.id}>
             <div className="message-content">
               {message.profileImage ? (
-                <img className="thumb-img" src={message.profileImage} alt={message.nickname} />
+                <img
+                  className="thumb-img"
+                  src={message.profileImage}
+                  alt={message.nickname}
+                />
               ) : (
                 <div className="anonymous-thumb" />
               )}

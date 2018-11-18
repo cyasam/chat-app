@@ -33,16 +33,18 @@ class Register extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ message: nextProps.serverMessage });
+  static getDerivedStateFromProps(nextProps) {
+    const { status, serverMessage } = nextProps;
 
-    if (nextProps.status) {
+    if (status) {
       const { history, match } = this.props;
       history.push({
         pathname: `${match.url}/complete`,
-        state: { activated: nextProps.status, message: nextProps.serverMessage }
+        state: { activated: status, message: serverMessage }
       });
     }
+
+    return { message: serverMessage };
   }
 
   onChange(e) {
@@ -149,13 +151,17 @@ class Register extends Component {
             <div className={status ? 'success' : 'error'}>{message}</div>
           )}
           <form className="form-wrapper" onSubmit={this.onSubmit}>
-            <NicknameInput
-              value={nickname}
-              minLength={minStringLength}
-              onChange={this.onChange}
-            />
-            <label htmlFor="email">
-              <span>Email</span>
+            <div className="form-row">
+              <NicknameInput
+                value={nickname}
+                minLength={minStringLength}
+                onChange={this.onChange}
+              />
+            </div>
+            <div className="form-row">
+              <label htmlFor="email">
+                <span>Email</span>
+              </label>
               <input
                 id="email"
                 name="email"
@@ -163,9 +169,11 @@ class Register extends Component {
                 value={email}
                 onChange={this.onChange}
               />
-            </label>
-            <label htmlFor="name">
-              <span>Name</span>
+            </div>
+            <div className="form-row">
+              <label htmlFor="name">
+                <span>Name</span>
+              </label>
               <input
                 id="name"
                 name="name"
@@ -173,9 +181,11 @@ class Register extends Component {
                 value={name}
                 onChange={this.onChange}
               />
-            </label>
-            <label htmlFor="password">
-              <span>Password</span>
+            </div>
+            <div className="form-row">
+              <label htmlFor="password">
+                <span>Password</span>
+              </label>
               <input
                 id="password"
                 name="password"
@@ -183,9 +193,11 @@ class Register extends Component {
                 value={password}
                 onChange={this.onChange}
               />
-            </label>
-            <label htmlFor="confirm-password">
-              <span>Confirm password</span>
+            </div>
+            <div className="form-row">
+              <label htmlFor="confirm-password">
+                <span>Confirm password</span>
+              </label>
               <input
                 id="confirm-password"
                 name="confirmPassword"
@@ -193,7 +205,7 @@ class Register extends Component {
                 value={confirmPassword}
                 onChange={this.onChange}
               />
-            </label>
+            </div>
             <button type="submit" disabled={isFetching}>
               SignUp
             </button>
@@ -216,7 +228,6 @@ Register.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   auth: PropTypes.object.isRequired,
   status: PropTypes.bool.isRequired,
-  serverMessage: PropTypes.string.isRequired,
   nicknameStatus: PropTypes.bool.isRequired,
   registerFormLoader: PropTypes.func.isRequired,
   match: PropTypes.object.isRequired,

@@ -36,19 +36,31 @@ class NicknameInput extends Component {
       return 'Loading';
     }
 
-    return value.length >= minLength && <span className="nick-result">{message}</span>;
+    return (
+      value.length >= minLength && (
+        <span className="nick-result">{message}</span>
+      )
+    );
   }
 
   render() {
     const { value } = this.props;
     return (
-      <label htmlFor="nickname">
-        <span>
-          Nickname
-          <span>{this.renderMessage()}</span>
-        </span>
-        <input id="nickname" name="nickname" type="text" value={value} onChange={this.onChange} />
-      </label>
+      <div className="form-row">
+        <label htmlFor="nickname">
+          <span>
+            Nickname
+            <span>{this.renderMessage()}</span>
+          </span>
+        </label>
+        <input
+          id="nickname"
+          name="nickname"
+          type="text"
+          value={value}
+          onChange={this.onChange}
+        />
+      </div>
     );
   }
 }

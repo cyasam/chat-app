@@ -48,24 +48,28 @@ const ActivateAccount = Loadable({
   }
 });
 
-const AppContainer = props => (
-  <Router>
-    <div className="wrapper">
-      <Header />
-      {props.auth.status && <ActivateAccount />}
-      <div className="container">
-        {props.auth.status && <ActiveUsers />}
-        <Switch>
-          <Route path="/" exact component={Protected(Home)} />
-          <Route path="/register" component={RegisterIndex} />
-          <Route path="/login" component={Login} />
-          <Route path="/profile" component={Protected(Profile)} />
-          <Redirect to="/" path="*" />
-        </Switch>
+const AppContainer = props => {
+  const { auth } = props;
+
+  return (
+    <Router>
+      <div className="wrapper">
+        <Header />
+        {auth.status && <ActivateAccount />}
+        <div className="container">
+          {auth.status && <ActiveUsers />}
+          <Switch>
+            <Route path="/" exact component={Protected(Home)} />
+            <Route path="/register" component={RegisterIndex} />
+            <Route path="/login" component={Login} />
+            <Route path="/profile" component={Protected(Profile)} />
+            <Redirect to="/" path="*" />
+          </Switch>
+        </div>
       </div>
-    </div>
-  </Router>
-);
+    </Router>
+  );
+};
 
 const mapStateToProps = state => ({
   auth: state.authentication.auth

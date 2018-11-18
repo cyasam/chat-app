@@ -7,22 +7,16 @@ import config from '../config';
 export default ComposedComponent => {
   class Protected extends Component {
     componentDidMount() {
-      const token = localStorage.getItem(config.TOKEN_KEY_NAME);
-      const { auth, history, chatSocket, email } = this.props;
-
-      if (!auth.status && !token) {
-        history.push('/login');
-      } else {
-        this.socket = chatSocket;
-
-        if (Object.keys(this.socket).length && email.length) {
-          this.startSocket();
-        }
-      }
+      this.runComponent();
     }
 
-    componentWillReceiveProps(nextProps) {
-      const { auth, history, chatSocket, email } = nextProps;
+    componentDidUpdate() {
+      this.runComponent();
+    }
+
+    runComponent() {
+      const { auth, history, chatSocket } = this.props;
+      const { email, nickname } = auth;
 
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
 
@@ -31,15 +25,10 @@ export default ComposedComponent => {
       } else {
         this.socket = chatSocket;
 
-        if (Object.keys(this.socket).length && email.length) {
-          this.startSocket();
+        if (Object.keys(this.socket).length && email && nickname) {
+          setTimeout(() => this.socket.emit('add user', { email, nickname }));
         }
       }
-    }
-
-    startSocket() {
-      const { email, nickname } = this.props;
-      this.socket.emit('add user', { email, nickname });
     }
 
     render() {
