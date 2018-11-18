@@ -67,58 +67,67 @@ class Chat extends Component {
   }
 
   startSocket() {
-    const { messageList } = this.state;
     const { email } = this.props;
 
     this.socket.on('new message', message => {
-      const newMessage = messageList.find(
+      const { messageList } = this.state;
+      const messageListClone = [...messageList];
+
+      const newMessage = messageListClone.find(
         item => item.email === message.email && item.typing
       );
 
       if (newMessage) {
-        const index = messageList.indexOf(newMessage);
-        messageList[index].text = message.text;
-        messageList[index].typing = false;
-        messageList[index].profileImage = this.getProfileImage(message.email);
-        messageList[index].self = message.email === email;
+        const index = messageListClone.indexOf(newMessage);
+        messageListClone[index].text = message.text;
+        messageListClone[index].typing = false;
+        messageListClone[index].profileImage = this.getProfileImage(
+          message.email
+        );
+        messageListClone[index].self = message.email === email;
 
-        this.setState({ messageList });
+        this.setState({ messageList: messageListClone });
       } else {
         const newMessageObj = { ...message };
-        newMessageObj.id = messageList.length;
+        newMessageObj.id = messageListClone.length;
         newMessageObj.typing = false;
         newMessageObj.profileImage = this.getProfileImage(message.email);
         newMessageObj.self = message.email === email;
 
         this.setState({
-          messageList: [...messageList, newMessageObj]
+          messageList: [...messageListClone, newMessageObj]
         });
       }
     });
 
     this.socket.on('typing', typingObj => {
+      const { messageList } = this.state;
+      const messageListClone = [...messageList];
+
       const data = { ...typingObj };
-      const message = messageList.find(
+      const message = messageListClone.find(
         item => item.email === typingObj.email && item.typing
       );
 
       if (!message && typingObj.email !== email) {
-        data.id = messageList.length;
+        data.id = messageListClone.length;
         data.text = 'typing';
         data.typing = true;
         data.profileImage = this.getProfileImage(typingObj.email);
-        this.setState({ messageList: [...messageList, data] });
+        this.setState({ messageList: [...messageListClone, data] });
       }
     });
 
     this.socket.on('stop typing', typingObj => {
+      const { messageList } = this.state;
       const messageListClone = [...messageList];
-      const message = messageList.filter(
+
+      const message = messageListClone.filter(
         item => item.email === typingObj.email && item.typing
       );
 
       if (message.length && typingObj.email !== email) {
-        const index = messageList.indexOf(message);
+        const index = messageListClone.indexOf(message);
         messageListClone.splice(index, 1);
       }
 
