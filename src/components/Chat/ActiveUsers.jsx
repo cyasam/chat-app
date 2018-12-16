@@ -2,13 +2,14 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import getUsersListAction from '../../actions/get-users-list-action';
+import ActiveUser from './ActiveUser';
 
 class ActiveUsers extends Component {
   constructor() {
     super();
 
     this.state = {
-      activeUsers: {},
+      activeUsers: {}
     };
   }
 
@@ -32,26 +33,21 @@ class ActiveUsers extends Component {
   }
 
   renderActiveUsers() {
+    const { auth } = this.props;
     const { activeUsers } = this.state;
-    const nicknameClass = 'status online';
 
     return (
       <Fragment>
         {Object.keys(activeUsers).map(id => {
           const user = activeUsers[id];
           return (
-            <li key={id}>
-              {user.profileImage ? (
-                <img
-                  className="thumb-img"
-                  src={user.profileImage}
-                  alt={user.nickname}
-                />
-              ) : (
-                <div className="anonymous-thumb" />
+            <Fragment key={id}>
+              {auth.nickname !== user.nickname && (
+                <li>
+                  <ActiveUser user={user} />
+                </li>
               )}
-              {user.nickname} <span className={nicknameClass} />
-            </li>
+            </Fragment>
           );
         })}
       </Fragment>
@@ -67,9 +63,16 @@ class ActiveUsers extends Component {
 
     return (
       <div className={`users-list-wrapper${menuOpen ? ' open' : ''}`}>
-        <ul className="user-list">
-          {isFetching ? <li>Loading...</li> : this.renderActiveUsers()}
-        </ul>
+        {isFetching ? (
+          <p>Loading...</p>
+        ) : (
+          <Fragment>
+            <div className="self">
+              <ActiveUser user={auth} />
+            </div>
+            <ul className="user-list">{this.renderActiveUsers()}</ul>
+          </Fragment>
+        )}
       </div>
     );
   }
@@ -80,7 +83,7 @@ const mapStateToProps = state => ({
   isFetching: state.usersList.isFetching,
   users: state.usersList.users,
   menuOpen: state.menuOpen.status,
-  chatSocket: state.chatSocket,
+  chatSocket: state.chatSocket
 });
 
 ActiveUsers.propTypes = {
@@ -88,10 +91,10 @@ ActiveUsers.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   menuOpen: PropTypes.bool.isRequired,
   getUsersList: PropTypes.func.isRequired,
-  chatSocket: PropTypes.object.isRequired,
+  chatSocket: PropTypes.object.isRequired
 };
 
 export default connect(
   mapStateToProps,
-  { getUsersList: getUsersListAction },
+  { getUsersList: getUsersListAction }
 )(ActiveUsers);

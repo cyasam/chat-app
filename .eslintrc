@@ -24,7 +24,8 @@
     "jsx-a11y/label-has-for": "off",
     "jsx-a11y/label-has-associated-control": "off",
     "comma-dangle": "off",
-    "react/forbid-prop-types": "off"
+    "react/forbid-prop-types": "off",
+    "class-methods-use-this": "off"
   },
   "globals": {
     "window": true,

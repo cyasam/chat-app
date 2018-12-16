@@ -267,7 +267,6 @@ background: #ccc;
   content: 'â†»';
 }
 
-
 // General
 
 $input-text-height: 40px;
@@ -285,7 +284,7 @@ body {
 }
 
 body {
-  font: 15px/1.2 "Lato", Arial, sans-serif;
+  font: 15px/1.2 'Lato', Arial, sans-serif;
 }
 
 input,
@@ -400,7 +399,7 @@ $thumb-size: 30px;
       margin-bottom: 8px;
     }
 
-    >span {
+    > span {
       display: block;
       margin-bottom: 10px;
     }
@@ -498,7 +497,7 @@ $profile-image-size: 200px;
       background-color: #503a8f;
     }
 
-    input[type=file] {
+    input[type='file'] {
       width: 0;
       position: absolute;
       z-index: -1;
@@ -685,6 +684,7 @@ $profile-image-size: 200px;
 
 .users-list-wrapper {
   display: flex;
+  flex-direction: column;
   width: 250px;
   background-color: #503a8f;
   color: #fff;
@@ -697,10 +697,15 @@ $profile-image-size: 200px;
     padding: 0;
   }
 
-  li {
+  li,
+  .self {
     display: flex;
     align-items: center;
     padding: 16px 20px;
+  }
+
+  .self {
+    border: 1px solid rgba($color: #000, $alpha: 0.4);
   }
 
   $bullet-size: 9px;
