@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import getUsersListAction from '../../actions/get-users-list-action';
@@ -8,7 +8,7 @@ class ActiveUsers extends Component {
     super();
 
     this.state = {
-      activeUsers: {}
+      activeUsers: {},
     };
   }
 
@@ -31,31 +31,35 @@ class ActiveUsers extends Component {
     }
   }
 
-  renderUsers(user) {
+  renderActiveUsers() {
     const { activeUsers } = this.state;
-    const activeUser = Object.keys(activeUsers).find(
-      id => activeUsers[id].email === user.email
-    );
-    const nicknameClass = `status ${activeUser ? 'online' : 'offline'}`;
+    const nicknameClass = 'status online';
 
     return (
-      <li key={user.id}>
-        {user.profileImage ? (
-          <img
-            className="thumb-img"
-            src={user.profileImage}
-            alt={user.nickname}
-          />
-        ) : (
-          <div className="anonymous-thumb" />
-        )}
-        {user.nickname} <span className={nicknameClass} />
-      </li>
+      <Fragment>
+        {Object.keys(activeUsers).map(id => {
+          const user = activeUsers[id];
+          return (
+            <li key={id}>
+              {user.profileImage ? (
+                <img
+                  className="thumb-img"
+                  src={user.profileImage}
+                  alt={user.nickname}
+                />
+              ) : (
+                <div className="anonymous-thumb" />
+              )}
+              {user.nickname} <span className={nicknameClass} />
+            </li>
+          );
+        })}
+      </Fragment>
     );
   }
 
   render() {
-    const { auth, isFetching, users, menuOpen } = this.props;
+    const { auth, isFetching, menuOpen } = this.props;
 
     if (!auth.status) {
       return null;
@@ -64,11 +68,7 @@ class ActiveUsers extends Component {
     return (
       <div className={`users-list-wrapper${menuOpen ? ' open' : ''}`}>
         <ul className="user-list">
-          {isFetching ? (
-            <li>Loading...</li>
-          ) : (
-            users.map(user => this.renderUsers(user))
-          )}
+          {isFetching ? <li>Loading...</li> : this.renderActiveUsers()}
         </ul>
       </div>
     );
@@ -80,19 +80,18 @@ const mapStateToProps = state => ({
   isFetching: state.usersList.isFetching,
   users: state.usersList.users,
   menuOpen: state.menuOpen.status,
-  chatSocket: state.chatSocket
+  chatSocket: state.chatSocket,
 });
 
 ActiveUsers.propTypes = {
   auth: PropTypes.object.isRequired,
   isFetching: PropTypes.bool.isRequired,
-  users: PropTypes.array.isRequired,
   menuOpen: PropTypes.bool.isRequired,
   getUsersList: PropTypes.func.isRequired,
-  chatSocket: PropTypes.object.isRequired
+  chatSocket: PropTypes.object.isRequired,
 };
 
 export default connect(
   mapStateToProps,
-  { getUsersList: getUsersListAction }
+  { getUsersList: getUsersListAction },
 )(ActiveUsers);

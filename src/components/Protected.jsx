@@ -15,12 +15,11 @@ export default ComposedComponent => {
     }
 
     runComponent() {
-      const { auth, history, chatSocket } = this.props;
-      const { email, nickname } = auth;
+      const { history, chatSocket, nickname, email } = this.props;
 
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
 
-      if (!auth.status && !token) {
+      if (!token) {
         history.push('/login');
       } else {
         this.socket = chatSocket;
@@ -32,10 +31,9 @@ export default ComposedComponent => {
     }
 
     render() {
-      const { auth } = this.props;
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
 
-      if (!auth.status && !token) {
+      if (!token) {
         return null;
       }
 
@@ -44,7 +42,6 @@ export default ComposedComponent => {
   }
 
   const mapStateToProps = state => ({
-    auth: state.authentication.auth,
     nickname: state.authentication.auth.nickname,
     email: state.authentication.auth.email,
     chatSocket: state.chatSocket
@@ -58,7 +55,6 @@ export default ComposedComponent => {
   Protected.propTypes = {
     nickname: PropTypes.string,
     email: PropTypes.string,
-    auth: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     chatSocket: PropTypes.object.isRequired
   };
