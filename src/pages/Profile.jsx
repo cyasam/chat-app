@@ -14,6 +14,10 @@ class Profile extends Component {
   render() {
     const { message, data } = this.props;
 
+    if(!Object.keys(data).length) {
+      return null;
+    }
+
     return (
       <div className="page-container">
         {message && <div className="error"> {message} </div>}{' '}

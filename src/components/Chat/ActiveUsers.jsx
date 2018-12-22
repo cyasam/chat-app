@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import getUsersListAction from '../../actions/get-users-list-action';
+import ActiveUser from './ActiveUser';
 
 class ActiveUsers extends Component {
   constructor() {
@@ -79,9 +80,16 @@ class ActiveUsers extends Component {
 
     return (
       <div className={`users-list-wrapper${menuOpen ? ' open' : ''}`}>
-        <ul className="user-list">
-          {isFetching ? <li>Loading...</li> : this.renderActiveUsers()}
-        </ul>
+        {isFetching ? (
+          <p>Loading...</p>
+        ) : (
+          <Fragment>
+            <div className="self">
+              <ActiveUser user={auth} />
+            </div>
+            <ul className="user-list">{this.renderActiveUsers()}</ul>
+          </Fragment>
+        )}
       </div>
     );
   }
