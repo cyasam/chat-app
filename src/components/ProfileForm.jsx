@@ -19,8 +19,8 @@ class ProfileForm extends Component {
       minPasswordLength: 5,
       profileImageOld: null,
       profileImage: null,
+      submitted: false,
       firstLoad: true,
-      formStatus: false,
       message: '',
       nickname: '',
       name: '',
@@ -35,39 +35,29 @@ class ProfileForm extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, state) {
-    const { formStatus, firstLoad } = state;
-    const { data } = nextProps;
+    const { firstLoad, submitted } = state;
+    const { data, formStatus, serverMessage } = nextProps;
+    let returnState = null;
 
-    if (!formStatus && firstLoad) {
-      if (Object.keys(data).length) {
-        return {
-          ...data,
-          profileImageOld: data.profileImage.original,
-          firstLoad: false,
-          message: '',
-        };
-      }
-    }
-
-    if (nextProps.formStatus) {
-      let resetObj = {};
-
-      if (data.status) {
-        resetObj = { password: '', confirmPassword: '' };
-      }
-
-      nextProps.getUsersList();
-      return {
+    if (data.nickname && firstLoad) {
+      returnState = {
+        firstLoad: false,
         ...data,
-        profileImageOld: data.profileImage.original,
-        ...resetObj,
+        profileImageOld: data.profileImage ? data.profileImage.original : '',
+        message: '',
+      };
+    } else if (submitted && formStatus) {
+      returnState = {
+        submitted: false,
+        ...data,
+        password: '',
+        confirmPassword: '',
+        profileImageOld: data.profileImage ? data.profileImage.original : '',
+        message: serverMessage,
       };
     }
 
-    return {
-      formStatus: nextProps.formStatus,
-      message: nextProps.serverMessage,
-    };
+    return returnState;
   }
 
   onChange(e) {
@@ -90,7 +80,7 @@ class ProfileForm extends Component {
       password,
     });
 
-    this.setState({ formStatus: false });
+    this.setState({ submitted: true });
 
     if (this.onValidate()) {
       if (formData) {
@@ -116,38 +106,34 @@ class ProfileForm extends Component {
     const {
       minStringLength,
       minPasswordLength,
-      nickname,
       name,
       password,
       confirmPassword,
     } = this.state;
 
-    if (!validator.isLength(nickname, { min: minStringLength })) {
-      this.setState({ message: 'Provide your nickname.' });
-      return false;
-    }
+    let validation = true;
 
     if (!validator.isLength(name, { min: minStringLength })) {
       this.setState({ message: 'Provide your name.' });
-      return false;
-    }
-
-    if (validator.isLength(password, { min: 1, max: minPasswordLength - 1 })) {
+      validation = false;
+    } else if (
+      password.length &&
+      !validator.isLength(password, { min: minPasswordLength })
+    ) {
       this.setState({
         message: `Password length must be at least ${minPasswordLength}.`,
       });
-      return false;
-    }
-
-    if (
-      validator.isLength(password, { min: 1 }) &&
+      validation = false;
+    } else if (
+      (confirmPassword.length &&
+        !validator.isLength(confirmPassword, { min: minPasswordLength })) ||
       password !== confirmPassword
     ) {
       this.setState({ message: 'Password and Confirm password not matched.' });
-      return false;
+      validation = false;
     }
 
-    return true;
+    return validation;
   }
 
   resetImage(name) {
@@ -182,7 +168,8 @@ class ProfileForm extends Component {
   }
 
   renderMessage() {
-    const { message, formStatus } = this.state;
+    const { message } = this.state;
+    const { formStatus } = this.props;
 
     return (
       <Fragment>
@@ -286,6 +273,7 @@ const mapStateToProps = state => ({
 
 ProfileForm.propTypes = {
   isFetching: PropTypes.bool.isRequired,
+  formStatus: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
   profileFormLoader: PropTypes.func.isRequired,
 };
