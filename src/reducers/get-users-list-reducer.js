@@ -1,4 +1,8 @@
-import { GET_USERS_LIST_LOADING, GET_USERS_LIST_SUCCESS, GET_USERS_LIST_ERROR } from '../actions/get-users-list-action';
+import {
+  GET_USERS_LIST_LOADING,
+  GET_USERS_LIST_SUCCESS,
+  GET_USERS_LIST_ERROR
+} from '../actions/get-users-list-action';
 
 const INITIAL_STATE = {
   isFetching: true,

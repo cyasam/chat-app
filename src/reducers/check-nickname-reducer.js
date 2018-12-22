@@ -1,4 +1,8 @@
-import { CHECK_NICKNAME_LOADING, CHECK_NICKNAME_SUCCESS, CHECK_NICKNAME_ERROR } from '../actions/check-nickname-action';
+import {
+  CHECK_NICKNAME_LOADING,
+  CHECK_NICKNAME_SUCCESS,
+  CHECK_NICKNAME_ERROR
+} from '../actions/check-nickname-action';
 
 const INITIAL_STATE = {
   isFetching: false,

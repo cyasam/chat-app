@@ -16,5 +16,5 @@ export default combineReducers({
   usersList: getUsersListReducer,
   chatSocket: chatSocketReducer,
   checkNickname: checkNicknameReducer,
-  menuOpen: menuClickReducer,
+  menuOpen: menuClickReducer
 });

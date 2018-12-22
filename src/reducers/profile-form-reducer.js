@@ -1,4 +1,8 @@
-import { PROFILE_FORM_LOADING, PROFILE_FORM_SUCCESS, PROFILE_FORM_ERROR } from '../actions/profile-form-action';
+import {
+  PROFILE_FORM_LOADING,
+  PROFILE_FORM_SUCCESS,
+  PROFILE_FORM_ERROR
+} from '../actions/profile-form-action';
 
 const INITIAL_STATE = {
   isFetching: false,

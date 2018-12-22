@@ -1,5 +1,13 @@
-import { PROFILE_LOADING, PROFILE_SUCCESS, PROFILE_ERROR } from '../actions/profile-action';
-import { LOGOUT_LOADING, LOGOUT_SUCCESS, LOGOUT_ERROR } from '../actions/logout-action';
+import {
+  PROFILE_LOADING,
+  PROFILE_SUCCESS,
+  PROFILE_ERROR
+} from '../actions/profile-action';
+import {
+  LOGOUT_LOADING,
+  LOGOUT_SUCCESS,
+  LOGOUT_ERROR
+} from '../actions/logout-action';
 
 const INITIAL_STATE = {
   isFetching: false,

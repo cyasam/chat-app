@@ -1,8 +1,4 @@
-import {
-  AUTH_LOADING,
-  AUTH_SUCCESS,
-  AUTH_ERROR
-} from '../actions/auth-action';
+import { AUTH_LOADING, AUTH_SUCCESS, AUTH_ERROR } from '../actions/auth-action';
 import {
   LOGOUT_LOADING,
   LOGOUT_SUCCESS,

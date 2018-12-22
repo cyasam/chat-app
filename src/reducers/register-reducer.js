@@ -1,5 +1,13 @@
-import { REGISTER_FORM_LOADING, REGISTER_FORM_SUCCESS, REGISTER_FORM_ERROR } from '../actions/register-form-action';
-import { REGISTER_LOADING, REGISTER_SUCCESS, REGISTER_ERROR } from '../actions/register-action';
+import {
+  REGISTER_FORM_LOADING,
+  REGISTER_FORM_SUCCESS,
+  REGISTER_FORM_ERROR
+} from '../actions/register-form-action';
+import {
+  REGISTER_LOADING,
+  REGISTER_SUCCESS,
+  REGISTER_ERROR
+} from '../actions/register-action';
 
 const INITIAL_STATE = {
   isFetching: false,
