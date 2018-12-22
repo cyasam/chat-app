@@ -15,7 +15,7 @@ export default ComposedComponent => {
     }
 
     runComponent() {
-      const { history, chatSocket, nickname, email } = this.props;
+      const { history, chatSocket, nickname, email, profileImage } = this.props;
 
       const token = localStorage.getItem(config.TOKEN_KEY_NAME);
 
@@ -24,8 +24,10 @@ export default ComposedComponent => {
       } else {
         this.socket = chatSocket;
 
-        if (Object.keys(this.socket).length && email && nickname) {
-          setTimeout(() => this.socket.emit('add user', { email, nickname }));
+        if (this.socket && email && nickname) {
+          setTimeout(() =>
+            this.socket.emit('add user', { email, nickname, profileImage }),
+          );
         }
       }
     }
@@ -42,21 +44,25 @@ export default ComposedComponent => {
   }
 
   const mapStateToProps = state => ({
+    chatSocket: state.chatSocket,
     nickname: state.authentication.auth.nickname,
     email: state.authentication.auth.email,
-    chatSocket: state.chatSocket
+    profileImage: state.authentication.auth.profileImage,
   });
 
   Protected.defaultProps = {
+    chatSocket: null,
     nickname: '',
-    email: ''
+    email: '',
+    profileImage: null,
   };
 
   Protected.propTypes = {
     nickname: PropTypes.string,
     email: PropTypes.string,
+    profileImage: PropTypes.object,
     history: PropTypes.object.isRequired,
-    chatSocket: PropTypes.object.isRequired
+    chatSocket: PropTypes.object,
   };
 
   return withRouter(connect(mapStateToProps)(Protected));

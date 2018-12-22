@@ -22,7 +22,7 @@ class MessageScreen extends Component {
               {message.profileImage ? (
                 <img
                   className="thumb-img"
-                  src={message.profileImage}
+                  src={message.profileImage.thumb}
                   alt={message.nickname}
                 />
               ) : (
@@ -41,7 +41,7 @@ class MessageScreen extends Component {
 }
 
 MessageScreen.propTypes = {
-  messageList: PropTypes.array.isRequired
+  messageList: PropTypes.array.isRequired,
 };
 
 export default MessageScreen;

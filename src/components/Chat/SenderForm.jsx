@@ -6,7 +6,7 @@ class SenderForm extends Component {
     super();
 
     this.state = {
-      message: ''
+      message: '',
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -21,14 +21,14 @@ class SenderForm extends Component {
     if (message && message.length) {
       onSubmit(message);
       this.setState({
-        message: ''
+        message: '',
       });
     }
   }
 
   onChange(event) {
     this.setState({
-      message: event.target.value
+      message: event.target.value,
     });
     const { onInputChange } = this.props;
     onInputChange(event);
@@ -59,7 +59,7 @@ class SenderForm extends Component {
 
 SenderForm.propTypes = {
   onInputChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default SenderForm;

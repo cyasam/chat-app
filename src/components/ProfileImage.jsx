@@ -8,7 +8,7 @@ class ProfileImage extends Component {
 
     this.state = {
       name: '',
-      previewImage: false
+      previewImage: false,
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -42,16 +42,16 @@ class ProfileImage extends Component {
       viewport: {
         width,
         height,
-        type: 'square'
+        type: 'square',
       },
       boundary: {
         width,
-        height
-      }
+        height,
+      },
     });
 
     this.croppie.bind({
-      url: image.src
+      url: image.src,
     });
 
     profileImageBox.addEventListener('update', () => {
@@ -89,12 +89,6 @@ class ProfileImage extends Component {
     this.setState({ previewImage: false });
   }
 
-  changeImageNameStr() {
-    const { oldImage } = this.props;
-
-    return oldImage ? oldImage.replace('-thumb', '') : oldImage;
-  }
-
   render() {
     const { previewImage } = this.state;
     const { oldImage } = this.props;
@@ -124,11 +118,7 @@ class ProfileImage extends Component {
         ) : (
           <label htmlFor="profile-image-input">
             {oldImage ? (
-              <img
-                src={this.changeImageNameStr()}
-                className="profile-placeholder"
-                alt=""
-              />
+              <img src={oldImage} className="profile-placeholder" alt="" />
             ) : (
               <div className="profile-placeholder" />
             )}
@@ -147,14 +137,14 @@ class ProfileImage extends Component {
 }
 
 ProfileImage.defaultProps = {
-  oldImage: ''
+  oldImage: '',
 };
 
 ProfileImage.propTypes = {
   oldImage: PropTypes.string,
   onSubmit: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
-  resetImage: PropTypes.func.isRequired
+  resetImage: PropTypes.func.isRequired,
 };
 
 export default ProfileImage;

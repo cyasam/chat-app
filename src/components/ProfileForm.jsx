@@ -25,7 +25,7 @@ class ProfileForm extends Component {
       nickname: '',
       name: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -42,9 +42,9 @@ class ProfileForm extends Component {
       if (Object.keys(data).length) {
         return {
           ...data,
-          profileImageOld: data.profileImage,
+          profileImageOld: data.profileImage.original,
           firstLoad: false,
-          message: ''
+          message: '',
         };
       }
     }
@@ -59,14 +59,14 @@ class ProfileForm extends Component {
       nextProps.getUsersList();
       return {
         ...data,
-        profileImageOld: data.profileImage,
-        ...resetObj
+        profileImageOld: data.profileImage.original,
+        ...resetObj,
       };
     }
 
     return {
       formStatus: nextProps.formStatus,
-      message: nextProps.serverMessage
+      message: nextProps.serverMessage,
     };
   }
 
@@ -87,7 +87,7 @@ class ProfileForm extends Component {
     const formData = helpers.formDataValTrim({
       nickname,
       name,
-      password
+      password,
     });
 
     this.setState({ formStatus: false });
@@ -119,7 +119,7 @@ class ProfileForm extends Component {
       nickname,
       name,
       password,
-      confirmPassword
+      confirmPassword,
     } = this.state;
 
     if (!validator.isLength(nickname, { min: minStringLength })) {
@@ -134,7 +134,7 @@ class ProfileForm extends Component {
 
     if (validator.isLength(password, { min: 1, max: minPasswordLength - 1 })) {
       this.setState({
-        message: `Password length must be at least ${minPasswordLength}.`
+        message: `Password length must be at least ${minPasswordLength}.`,
       });
       return false;
     }
@@ -281,18 +281,18 @@ class ProfileForm extends Component {
 const mapStateToProps = state => ({
   isFetching: state.profileForm.isFetching,
   formStatus: state.profileForm.status,
-  serverMessage: state.profileForm.message
+  serverMessage: state.profileForm.message,
 });
 
 ProfileForm.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   data: PropTypes.object.isRequired,
-  profileFormLoader: PropTypes.func.isRequired
+  profileFormLoader: PropTypes.func.isRequired,
 };
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { profileFormLoader, getUsersList }
-  )(ProfileForm)
+    { profileFormLoader, getUsersList },
+  )(ProfileForm),
 );

@@ -18,42 +18,54 @@ class ActiveUsers extends Component {
 
     this.socket = chatSocket;
 
-    if (Object.keys(this.socket).length) {
+    if (this.socket) {
       this.socket.on('active users', activeUsers => {
-        this.setState({ activeUsers });
+        this.setState({
+          activeUsers,
+        });
       });
     }
   }
 
   componentWillUnmount() {
-    if (Object.keys(this.socket).length) {
+    if (this.socket) {
       this.socket.disconnect();
     }
   }
 
-  renderActiveUsers() {
+  setUserStatusClassName(user) {
     const { activeUsers } = this.state;
-    const nicknameClass = 'status online';
+    let className = 'status';
+
+    if (
+      Object.keys(activeUsers).find(id => activeUsers[id].email === user.email)
+    ) {
+      className = `${className} online`;
+    }
+
+    return className;
+  }
+
+  renderActiveUsers() {
+    const { users } = this.props;
 
     return (
       <Fragment>
-        {Object.keys(activeUsers).map(id => {
-          const user = activeUsers[id];
-          return (
-            <li key={id}>
-              {user.profileImage ? (
-                <img
-                  className="thumb-img"
-                  src={user.profileImage}
-                  alt={user.nickname}
-                />
-              ) : (
-                <div className="anonymous-thumb" />
-              )}
-              {user.nickname} <span className={nicknameClass} />
-            </li>
-          );
-        })}
+        {users.map(user => (
+          <li key={user.id}>
+            {user.profileImage ? (
+              <img
+                className="thumb-img"
+                src={user.profileImage.thumb}
+                alt={user.nickname}
+              />
+            ) : (
+              <div className="anonymous-thumb" />
+            )}
+            {user.nickname}{' '}
+            <span className={this.setUserStatusClassName(user)} />
+          </li>
+        ))}
       </Fragment>
     );
   }
@@ -77,14 +89,15 @@ class ActiveUsers extends Component {
 
 const mapStateToProps = state => ({
   auth: state.authentication.auth,
-  isFetching: state.usersList.isFetching,
   users: state.usersList.users,
+  isFetching: state.usersList.isFetching,
   menuOpen: state.menuOpen.status,
   chatSocket: state.chatSocket,
 });
 
 ActiveUsers.propTypes = {
   auth: PropTypes.object.isRequired,
+  users: PropTypes.array.isRequired,
   isFetching: PropTypes.bool.isRequired,
   menuOpen: PropTypes.bool.isRequired,
   getUsersList: PropTypes.func.isRequired,

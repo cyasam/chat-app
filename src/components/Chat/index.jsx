@@ -9,7 +9,7 @@ class Chat extends Component {
     super();
 
     this.state = {
-      messageList: []
+      messageList: [],
     };
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -20,7 +20,7 @@ class Chat extends Component {
     const { chatSocket } = this.props;
     this.socket = chatSocket;
 
-    if (Object.keys(this.socket).length) {
+    if (this.socket) {
       this.startSocket();
     }
   }
@@ -37,7 +37,7 @@ class Chat extends Component {
       profileImage,
       text,
       typing: false,
-      self: true
+      self: true,
     };
 
     this.setState({ messageList: [...messageList, messageObj] });
@@ -74,7 +74,7 @@ class Chat extends Component {
       const messageListClone = [...messageList];
 
       const newMessage = messageListClone.find(
-        item => item.email === message.email && item.typing
+        item => item.email === message.email && item.typing,
       );
 
       if (newMessage) {
@@ -82,7 +82,7 @@ class Chat extends Component {
         messageListClone[index].text = message.text;
         messageListClone[index].typing = false;
         messageListClone[index].profileImage = this.getProfileImage(
-          message.email
+          message.email,
         );
         messageListClone[index].self = message.email === email;
 
@@ -95,7 +95,7 @@ class Chat extends Component {
         newMessageObj.self = message.email === email;
 
         this.setState({
-          messageList: [...messageListClone, newMessageObj]
+          messageList: [...messageListClone, newMessageObj],
         });
       }
     });
@@ -106,7 +106,7 @@ class Chat extends Component {
 
       const data = { ...typingObj };
       const message = messageListClone.find(
-        item => item.email === typingObj.email && item.typing
+        item => item.email === typingObj.email && item.typing,
       );
 
       if (!message && typingObj.email !== email) {
@@ -123,7 +123,7 @@ class Chat extends Component {
       const messageListClone = [...messageList];
 
       const message = messageListClone.filter(
-        item => item.email === typingObj.email && item.typing
+        item => item.email === typingObj.email && item.typing,
       );
 
       if (message.length && typingObj.email !== email) {
@@ -157,22 +157,22 @@ class Chat extends Component {
 
 const mapStateToProps = state => ({
   nickname: state.authentication.auth.nickname,
-  email: state.authentication.auth.email || '',
-  profileImage: state.authentication.auth.profileImage || '',
+  email: state.authentication.auth.email,
+  profileImage: state.authentication.auth.profileImage,
   chatSocket: state.chatSocket,
-  users: state.usersList.users
+  users: state.usersList.users,
 });
 
 Chat.defaultProps = {
-  nickname: ''
+  nickname: '',
 };
 
 Chat.propTypes = {
   nickname: PropTypes.string,
   email: PropTypes.string.isRequired,
-  profileImage: PropTypes.string.isRequired,
+  profileImage: PropTypes.object.isRequired,
   chatSocket: PropTypes.object.isRequired,
-  users: PropTypes.array.isRequired
+  users: PropTypes.array.isRequired,
 };
 
 export default connect(mapStateToProps)(Chat);
