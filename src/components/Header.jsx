@@ -9,6 +9,10 @@ import clickMenu from '../actions/menu-click-action';
 const Header = props => {
   const { auth, logout } = props;
 
+  if (!Object.keys(auth).length) {
+    return false;
+  }
+
   return (
     <header className="main-header">
       <div className="header-inner">
@@ -49,18 +53,18 @@ const Header = props => {
 };
 
 const mapStateToProps = state => ({
-  auth: state.authentication.auth
+  auth: state.authentication.auth,
 });
 
 Header.propTypes = {
   auth: PropTypes.object.isRequired,
   logout: PropTypes.func.isRequired,
-  clickMenu: PropTypes.func.isRequired
+  clickMenu: PropTypes.func.isRequired,
 };
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { logout: logoutAction, clickMenu }
-  )(Header)
+    { logout: logoutAction, clickMenu },
+  )(Header),
 );

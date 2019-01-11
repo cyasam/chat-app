@@ -47,12 +47,13 @@ class ActiveUsers extends Component {
     return className;
   }
 
-  renderActiveUsers() {
-    const { users } = this.props;
+  renderOtherActiveUsers() {
+    const { users, auth } = this.props;
+    const otherAciveUsers = users.filter(user => user.email !== auth.email);
 
     return (
       <Fragment>
-        {users.map(user => (
+        {otherAciveUsers.map(user => (
           <li key={user.id}>
             {user.profileImage ? (
               <img
@@ -87,7 +88,7 @@ class ActiveUsers extends Component {
             <div className="self">
               <ActiveUser user={auth} />
             </div>
-            <ul className="user-list">{this.renderActiveUsers()}</ul>
+            <ul className="user-list">{this.renderOtherActiveUsers()}</ul>
           </Fragment>
         )}
       </div>
