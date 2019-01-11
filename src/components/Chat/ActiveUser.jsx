@@ -9,7 +9,7 @@ const ActiveUser = props => {
       {user.profileImage ? (
         <img
           className="thumb-img"
-          src={user.profileImage}
+          src={user.profileImage.thumb}
           alt={user.nickname}
         />
       ) : (
@@ -21,7 +21,7 @@ const ActiveUser = props => {
 };
 
 ActiveUser.propTypes = {
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
 };
 
 export default ActiveUser;
